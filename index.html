@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pochoutkový manuál – Libeřské lahůdky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#E85520; --brown:#3B1A0D; --olive:#6B7A50; --cream:#F0E8D6;
+  --cream-2:#FBF6EC; --paper:#FFFDF8; --line:rgba(59,26,13,.12); --line-strong:rgba(59,26,13,.22);
+  --shadow:0 18px 40px -22px rgba(59,26,13,.45);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;color:var(--brown);
+  background:radial-gradient(1100px 600px at 110% -10%, rgba(232,85,32,.10), transparent 60%),
+    radial-gradient(900px 700px at -10% 110%, rgba(107,122,80,.12), transparent 60%), var(--cream);
+  line-height:1.5;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px;}
+.head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:8px;}
+.logo{height:46px;width:auto;display:block;}
+.logo-fallback{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--orange);}
+.head h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.4vw,46px);line-height:1.02;margin:14px 0 6px;letter-spacing:-.5px;}
+.head h1 em{font-style:italic;color:var(--orange);}
+.lede{max-width:680px;font-size:16px;color:rgba(59,26,13,.78);margin:0 0 26px;}
+.badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--olive);border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;background:var(--paper);}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:26px;align-items:start;}
+@media(max-width:880px){.grid{grid-template-columns:1fr;}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:24px;}
+.card.sticky{position:sticky;top:18px;}
+@media(max-width:880px){.card.sticky{position:static;}}
+.card h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0 0 4px;letter-spacing:-.2px;}
+.card .sub{font-size:13.5px;color:rgba(59,26,13,.6);margin:0 0 18px;}
+.field{margin-bottom:18px;}
+.field>label.lbl{display:block;font-weight:700;font-size:13.5px;margin-bottom:8px;}
+.hint{font-weight:500;color:rgba(59,26,13,.55);font-size:12.5px;margin-left:4px;}
+.stepper{display:flex;align-items:stretch;gap:0;max-width:200px;}
+.stepper button{width:46px;border:1px solid var(--line-strong);background:var(--cream-2);color:var(--brown);font-size:22px;font-weight:600;cursor:pointer;line-height:1;border-radius:12px;transition:.15s;}
+.stepper button:hover{background:var(--orange);color:#fff;border-color:var(--orange);}
+.stepper input{flex:1;text-align:center;border:1px solid var(--line-strong);border-left:none;border-right:none;font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--brown);background:var(--paper);width:60px;}
+.stepper input:focus{outline:none;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.opts.three{grid-template-columns:1fr 1fr 1fr;}
+.opt{position:relative;border:1px solid var(--line-strong);border-radius:13px;padding:11px 12px;cursor:pointer;background:var(--cream-2);transition:.15s;font-size:13.5px;font-weight:600;text-align:center;user-select:none;}
+.opt small{display:block;font-weight:500;color:rgba(59,26,13,.55);font-size:11.5px;margin-top:2px;}
+.opt:hover{border-color:var(--olive);}
+.opt input{position:absolute;opacity:0;pointer-events:none;}
+.opt.sel{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 8px 18px -10px var(--orange);}
+.opt.sel small{color:rgba(255,255,255,.85);}
+.check{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:13.5px;border:1px solid var(--line);border-radius:13px;padding:11px 13px;background:var(--cream-2);transition:.15s;margin-bottom:8px;}
+.check:hover{border-color:var(--olive);}
+.check input{width:19px;height:19px;accent-color:var(--orange);cursor:pointer;}
+.check.on{background:rgba(107,122,80,.12);border-color:var(--olive);}
+.budget-row{display:flex;align-items:center;gap:10px;}
+.budget-row input[type=number]{flex:1;border:1px solid var(--line-strong);border-radius:12px;padding:12px 14px;font-size:16px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;color:var(--brown);background:var(--paper);}
+.budget-row input:focus{outline:2px solid var(--orange);border-color:var(--orange);}
+.budget-row .unit{font-weight:700;color:rgba(59,26,13,.55);}
+.section-h{font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--olive);margin:22px 0 10px;border-top:1px dashed var(--line-strong);padding-top:14px;}
+.go{width:100%;margin-top:6px;border:none;border-radius:14px;padding:16px;cursor:pointer;background:var(--orange);color:#fff;font-weight:700;font-size:16px;font-family:'Plus Jakarta Sans',sans-serif;transition:.15s;box-shadow:0 12px 24px -12px var(--orange);}
+.go:hover{background:#cf471a;transform:translateY(-1px);}
+.howto{margin-top:16px;border-top:1px dashed var(--line-strong);padding-top:12px;}
+.howto summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--olive);}
+.howto p{font-size:12.5px;color:rgba(59,26,13,.65);margin:8px 0 0;}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px;color:rgba(59,26,13,.5);}
+.empty .ico{font-size:46px;margin-bottom:10px;}
+.empty p{max-width:340px;font-size:14.5px;}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+@media(max-width:560px){.summary{grid-template-columns:1fr 1fr;}}
+.stat{background:var(--cream-2);border:1px solid var(--line);border-radius:14px;padding:13px 14px;}
+.stat .k{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(59,26,13,.55);}
+.stat .v{font-family:'Fraunces',serif;font-weight:600;font-size:25px;line-height:1.1;margin-top:3px;}
+.stat .v span{font-size:13px;font-weight:500;color:rgba(59,26,13,.55);font-family:'Plus Jakarta Sans',sans-serif;}
+.stat.hi{background:var(--orange);border-color:var(--orange);color:#fff;}
+.stat.hi .k{color:rgba(255,255,255,.8);}
+.stat.hi .v span{color:rgba(255,255,255,.8);}
+.note{background:rgba(232,85,32,.08);border:1px solid rgba(200,67,21,.3);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:600;color:#b03d12;margin-bottom:18px;}
+.deadline{background:rgba(107,122,80,.10);border:1px solid rgba(107,122,80,.35);border-radius:12px;padding:11px 14px;font-size:13px;color:var(--brown);margin-bottom:18px;line-height:1.55;}
+.deadline strong{color:#4d5a39;}
+.deadline .ko{color:#b03d12;font-weight:700;}
+.tag.cb{background:rgba(60,120,170,.14);color:#2f6189;}
+.tag.warn{background:rgba(232,85,32,.16);color:#b03d12;}
+.tag.rec{background:rgba(223,189,149,.35);color:#8a5a1e;}
+.delivery{background:rgba(232,85,32,.08);border:1px solid rgba(232,85,32,.30);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--brown);margin-bottom:18px;}
+.delivery strong{color:#b03d12;}
+/* free-shipping bar */
+.ship{background:linear-gradient(135deg,rgba(232,85,32,.10),rgba(107,122,80,.10));border:1px solid rgba(232,85,32,.30);border-radius:14px;padding:13px 15px;margin-bottom:20px;}
+.ship-top{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;}
+.ship-ico{font-size:18px;}
+.ship-msg{flex:1;}
+.ship-cap{font-size:12px;font-weight:700;color:rgba(59,26,13,.55);white-space:nowrap;}
+.ship-bar{height:12px;border-radius:999px;background:rgba(59,26,13,.10);margin-top:9px;overflow:hidden;position:relative;}
+.ship-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--orange),#f2843f);width:0%;transition:width 1.1s cubic-bezier(.22,1,.36,1);position:relative;}
+.ship-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-100%);animation:shimmer 2.2s infinite;}
+.ship-hint{font-size:11.5px;color:rgba(59,26,13,.5);margin-top:6px;}
+.ship.done{background:linear-gradient(135deg,rgba(107,122,80,.18),rgba(107,122,80,.08));border-color:rgba(107,122,80,.45);}
+.ship.done .ship-fill{background:linear-gradient(90deg,#6B7A50,#8a9a68);}
+.ship.done .ship-msg{color:#4d5a39;}
+@keyframes shimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+/* thumbnails */
+.linehead{display:flex;align-items:center;gap:12px;}
+.thumb{position:relative;width:48px;height:48px;flex:none;border-radius:11px;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;background:var(--cream-2);border:1px solid var(--line);font-size:23px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+/* reveal + flourishes */
+.reveal{opacity:0;animation:rise .5s ease both;}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.head h1 em{background:linear-gradient(90deg,var(--orange),#f2843f,var(--orange));background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:flow 4s linear infinite;}
+@keyframes flow{to{background-position:200% center}}
+.totalbar .big{animation:pop .5s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.empty .ico{animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.go{position:relative;overflow:hidden;}
+.go::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:sweep 3.5s ease-in-out infinite;}
+@keyframes sweep{0%,100%{left:-60%}50%{left:120%}}
+.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden;}
+.suggest{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,rgba(232,85,32,.12),rgba(223,189,149,.20));border:1px solid rgba(232,85,32,.30);border-radius:14px;padding:13px 15px;margin:2px 0 18px;animation:rise .5s ease both;}
+.suggest .sg-emo{font-size:30px;line-height:1;}
+.suggest .sg-tx{flex:1;display:flex;flex-direction:column;gap:2px;}
+.suggest .sg-tx strong{color:var(--brown);font-size:14px;}
+.suggest .sg-tx span{font-size:12px;color:rgba(59,26,13,.6);}
+.suggest button{background:var(--orange);color:#fff;border:none;border-radius:10px;padding:9px 15px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.suggest button:hover{background:#d2491b;}
+td.acts{white-space:nowrap;}
+.swap{background:rgba(107,122,80,.14);color:#4d5a39;border:none;border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:13px;margin-right:5px;vertical-align:middle;transition:background .15s,transform .15s;}
+.swap:hover{background:rgba(107,122,80,.26);transform:rotate(90deg);}
+.cart-ov{position:fixed;inset:0;background:rgba(40,22,10,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .25s ease;}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.cart-card{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:26px 28px;max-width:350px;width:100%;text-align:center;box-shadow:0 22px 60px rgba(0,0,0,.32);}
+.cart-spin{width:46px;height:46px;border-radius:50%;border:4px solid rgba(232,85,32,.25);border-top-color:var(--orange);margin:0 auto 14px;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cart-h{font-family:"Fraunces",Georgia,serif;font-size:22px;color:var(--brown);margin-bottom:5px;}
+.cart-sub{font-size:13px;color:rgba(59,26,13,.72);margin-bottom:15px;}
+.cart-bar{height:9px;border-radius:999px;background:rgba(59,26,13,.12);overflow:hidden;margin-bottom:8px;}
+.cart-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--orange),#f2843f);transition:width .55s ease;}
+.cart-n{font-size:13px;font-weight:700;color:var(--brown);}
+.cart-n .cn{color:var(--orange);}
+.cart-note{font-size:11.5px;color:rgba(59,26,13,.58);margin-top:13px;line-height:1.55;}
+.cart-done{width:52px;height:52px;border-radius:50%;background:#6B7A50;color:#fff;font-size:28px;line-height:52px;margin:0 auto 12px;}
+.cart-close{margin-top:15px;background:var(--orange);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-weight:700;cursor:pointer;}
+.cart-close:hover{background:#d2491b;}
+.group-title{font-family:'Fraunces',serif;font-weight:600;font-size:17px;margin:22px 0 8px;display:flex;align-items:center;gap:8px;}
+.group-title .pill{font-family:'Plus Jakarta Sans';font-size:11px;font-weight:700;background:var(--cream-2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:rgba(59,26,13,.6);}
+table{width:100%;border-collapse:collapse;}
+.line{border-bottom:1px solid var(--line);}
+.line td{padding:10px 6px;vertical-align:middle;}
+.line .name{font-weight:600;font-size:14px;}
+.line .name a{color:var(--brown);text-decoration:none;border-bottom:1px solid var(--line-strong);}
+.line .name a:hover{color:var(--orange);border-color:var(--orange);}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:middle;}
+.tag.vege{background:rgba(107,122,80,.16);color:#4d5a39;}
+.tag.fish{background:rgba(60,120,170,.14);color:#2f6189;}
+.line .unit{font-size:12.5px;color:rgba(59,26,13,.55);}
+.cartlink{color:var(--orange);text-decoration:none;font-weight:700;border-bottom:1px dotted var(--orange);}
+.cartlink:hover{color:#b03d12;}
+.line .sum{font-weight:700;font-size:14px;white-space:nowrap;text-align:right;}
+.qty{display:inline-flex;align-items:center;gap:0;}
+.qty button{width:30px;height:30px;border:1px solid var(--line-strong);background:var(--cream-2);cursor:pointer;font-size:16px;font-weight:700;color:var(--brown);line-height:1;}
+.qty button:first-child{border-radius:9px 0 0 9px;}
+.qty button:last-child{border-radius:0 9px 9px 0;}
+.qty button:hover{background:var(--orange);color:#fff;border-color:var(--orange);}
+.qty .n{min-width:38px;text-align:center;font-weight:700;font-size:14px;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);height:30px;line-height:30px;background:var(--paper);}
+.del{background:none;border:none;cursor:pointer;color:rgba(59,26,13,.35);font-size:17px;padding:4px 6px;}
+.del:hover{color:var(--orange);}
+.totalbar{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:16px;border-top:2px solid var(--brown);}
+.totalbar .lbl{font-weight:700;font-size:15px;}
+.totalbar .big{font-family:'Fraunces',serif;font-weight:700;font-size:32px;color:var(--orange);}
+.adder{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+.adder select{flex:1;min-width:200px;border:1px solid var(--line-strong);border-radius:11px;padding:11px 12px;font-family:'Plus Jakarta Sans';font-size:13.5px;font-weight:600;color:var(--brown);background:var(--cream-2);}
+.adder button{border:1px solid var(--olive);background:var(--paper);color:var(--olive);font-weight:700;border-radius:11px;padding:11px 16px;cursor:pointer;font-size:13.5px;}
+.adder button:hover{background:var(--olive);color:#fff;}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.actions a,.actions button{border-radius:12px;padding:13px 18px;font-weight:700;font-size:14px;cursor:pointer;font-family:'Plus Jakarta Sans';text-decoration:none;border:1px solid var(--brown);transition:.15s;}
+.btn-cart{background:var(--orange);color:#fff;border-color:var(--orange);}
+.btn-cart:hover{background:#cf471a;}
+.btn-primary{background:var(--brown);color:var(--cream);}
+.btn-primary:hover{background:#27110a;}
+.btn-ghost{background:var(--paper);color:var(--brown);}
+.btn-ghost:hover{background:var(--cream-2);}
+.btn-shuffle{border-color:var(--olive);color:var(--olive);background:var(--paper);}
+.btn-shuffle:hover{background:var(--olive);color:#fff;}
+.foot{margin-top:30px;font-size:12px;color:rgba(59,26,13,.5);text-align:center;}
+.foot a{color:var(--olive);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(40px);background:var(--brown);color:var(--cream);padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;transition:.25s;pointer-events:none;box-shadow:var(--shadow);z-index:50;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <img class="logo" src="https://www.lahudky.cz/wp-content/uploads/2019/08/LL_full_colour_RGB_450px-min-e1566376099472.png" alt="Libeřské lahůdky" onerror="this.style.display='none';document.getElementById('lf').style.display='block';">
+    <span id="lf" class="logo-fallback" style="display:none;">Libeřské lahůdky</span>
+    <span class="badge">Pochoutkový manuál</span>
+  </div>
+  <h1>Pohoštění <em>na míru</em> za půl minuty</h1>
+  <p class="lede">Řekněte nám, kolik máte hostů, jaký druh akce chystáte, na co mají chuť a kolik chcete utratit. My z aktuální nabídky Libeřských lahůdek sestavíme vyvážený návrh košíku – chlebíčky, kanapky, obložené mísy, dezerty i doplňky – s počty, cenami a přidáním přímo do košíku.</p>
+
+  <div class="grid">
+
+    <div class="card sticky">
+      <h2>Nastavení akce</h2>
+      <p class="sub">Vyplňte, co o akci víte. Vše můžete potom doladit ručně.</p>
+
+      <div class="field">
+        <label class="lbl">Počet hostů</label>
+        <div class="stepper">
+          <button type="button" onclick="bumpPeople(-1)">−</button>
+          <input id="people" type="number" min="1" max="500" value="15" inputmode="numeric">
+          <button type="button" onclick="bumpPeople(1)">+</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Typ akce <span class="hint">ovlivní počet kousků na osobu</span></label>
+        <div class="opts">
+          <label class="opt" data-occ="coffee">Ke kávě<small>lehké · 3–4 ks</small><input type="radio" name="occ" value="coffee"></label>
+          <label class="opt" data-occ="meeting">Firemní meeting<small>svačina · 4–5 ks</small><input type="radio" name="occ" value="meeting"></label>
+          <label class="opt sel" data-occ="party">Večírek / raut<small>5–6 ks</small><input type="radio" name="occ" value="party" checked></label>
+          <label class="opt" data-occ="feast">Oslava / místo oběda<small>vydatné · 7–9 ks</small><input type="radio" name="occ" value="feast"></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Den vyzvednutí <span class="hint">dostupnost a uzávěrka objednávky</span></label>
+        <div class="opts">
+          <label class="opt" data-day="mon">Pondělí<small>vše</small><input type="radio" name="day" value="mon"></label>
+          <label class="opt sel" data-day="week">Út–Pá<small>vše</small><input type="radio" name="day" value="week" checked></label>
+          <label class="opt" data-day="sat">Sobota<small>bez buchet/koláčů</small><input type="radio" name="day" value="sat"></label>
+          <label class="opt" data-day="sun">Neděle<small>jen chleb./kan./mísy</small><input type="radio" name="day" value="sun"></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Skladba chutí</label>
+        <div class="opts">
+          <label class="opt" data-style="meat">Spíš masité<small>vege ~15 %</small><input type="radio" name="style" value="meat"></label>
+          <label class="opt sel" data-style="mix">Vyvážené<small>vege ~30 %</small><input type="radio" name="style" value="mix" checked></label>
+          <label class="opt" data-style="moreveg">Více zeleninové<small>vege ~60 %</small><input type="radio" name="style" value="moreveg"></label>
+          <label class="opt" data-style="vege">Jen vegetariánské<small>100 % vege</small><input type="radio" name="style" value="vege"></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Velikost soust</label>
+        <div class="opts three">
+          <label class="opt" data-size="chleb">Spíš chlebíčky<small>sytější</small><input type="radio" name="size" value="chleb"></label>
+          <label class="opt sel" data-size="bal">Vyvážené<small>mix</small><input type="radio" name="size" value="bal" checked></label>
+          <label class="opt" data-size="kan">Spíš jednohubky<small>kanapky</small><input type="radio" name="size" value="kan"></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Sladká tečka <span class="hint">krémové dezerty</span></label>
+        <div class="opts three">
+          <label class="opt" data-sweet="none">Bez<small>—</small><input type="radio" name="sweet" value="none"></label>
+          <label class="opt sel" data-sweet="some">Něco málo<small>~½ / os</small><input type="radio" name="sweet" value="some" checked></label>
+          <label class="opt" data-sweet="full">Pořádně<small>~1 / os</small><input type="radio" name="sweet" value="full"></label>
+        </div>
+      </div>
+
+      <div class="section-h">Doplňky (volitelné)</div>
+      <label class="check" id="ck_pastry"><input type="checkbox" id="sweetPastry"> Sladké pečivo – koláčky <span class="hint">~⅔ / os</span></label>
+      <label class="check" id="ck_brio"><input type="checkbox" id="briosky"> Plněné briošky <span class="hint">sytější</span></label>
+      <label class="check" id="ck_bag"><input type="checkbox" id="bagety"> Balené bagety <span class="hint">místo oběda</span></label>
+      <label class="check" id="ck_burg"><input type="checkbox" id="burger"> Mini burgery <span class="hint">boxy po 9 ks</span></label>
+
+      <div class="section-h">Mísa a omezení</div>
+      <label class="check on" id="misaCheck"><input type="checkbox" id="misa" checked> Obložená mísa jako střed stolu</label>
+      <label class="check" id="fishCheck"><input type="checkbox" id="fish"> Vynechat rybí a mořské pochoutky</label>
+
+      <div class="field" style="margin-top:18px;">
+        <label class="lbl">Strop rozpočtu <span class="hint">nepovinné</span></label>
+        <div class="budget-row">
+          <input id="budget" type="number" min="0" step="100" placeholder="např. 5000" inputmode="numeric">
+          <span class="unit">Kč</span>
+        </div>
+      </div>
+
+      <button class="go" type="button" onclick="generate()">Sestavit pohoštění →</button>
+
+      <details class="howto">
+        <summary>Jak to počítáme?</summary>
+        <p>Z druhu akce odvodíme počet slaných kousků na osobu (ke kávě ≈ 3,5 / firemní meeting ≈ 4,5 / večírek ≈ 5,5 / oslava ≈ 8), rozdělíme je mezi chlebíčky a kanapky podle velikosti soust a dodržíme poměr vegetariánských položek. Kusy rozprostřeme mezi víc druhů. Obložená mísa se počítá zhruba na 10–12 osob a o něco sníží počet jednotlivých kousků. Krémové dezerty a volitelné doplňky (koláčky ≈ ⅔/os, briošky ≈ 0,4/os, bagety ≈ 1 na 4 os, mini burgery 1 box/12 os) přidáme podle voleb. Respektujeme minimální odběry na druh (chlebíčky 5 ks, kanapky 10 ks, koláčky 5 ks od druhu – ostatní 1 ks/porce), takže počet u položky se může zaokrouhlit nahoru. Koláče i svatební koláčky se počítají po jednom kuse. Podle dne vyzvednutí navíc omezíme dostupné kategorie (v neděli jen chlebíčky, kanapky a mísy; v sobotu bez buchet a krájených koláčů) a ukážeme objednací uzávěrku – koláče a koláčky mají dřívější termín než ostatní sortiment. Strop rozpočtu návrh úměrně přiškrtí. Ceny pocházejí z e-shopu lahudky.cz, jsou vč. DPH a orientační – nabídka se mění.</p>
+      </details>
+    </div>
+
+    <div class="card" id="result">
+      <div class="empty">
+        <div class="ico">🥪</div>
+        <h2 style="margin-bottom:6px;">Zatím prázdný tác</h2>
+        <p>Vyplňte nastavení akce vlevo a klikněte na <strong>Sestavit pohoštění</strong>. Objeví se tu hotový návrh košíku, který můžete dál upravovat.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="foot">Postaveno z aktuální nabídky <a href="https://www.lahudky.cz" target="_blank" rel="noopener">lahudky.cz</a> · ceny vč. DPH, orientační · kompletní sortiment: chlebíčky, kanapky, mísy, briošky, bagety, toasty, tortilly, housky, mini burgery, hotová & smažená jídla, lahůdkářská klasika, saláty & pomazánky, dezerty, koláčky, koláče, buchty, záviny, pečivo. Minimální odběry na druh jsou u položek; tlačítko přidá zboží přímo do košíku. Chlebíčky Budějčák a Jarní jsou jen pro prodejnu České Budějovice (štítek „jen ČB“). Nově též chlebíčkový dort, řecký jogurt s granolou, hraběnčiny řezy, dezert s maracujou a svatební koláčky na váhu (480 Kč/kg – doporučujeme mix). Doprava po Praze zdarma při objednávce nad 3 000 Kč.</p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   POCHOUTKOVÝ MANUÁL v3 – konfigurátor pohoštění
+   Syntaxe dle zvyklostí LL: var + function(){}, žádné šipky,
+   žádné template literály, žádné const/let.
+   ============================================================ */
+var PRODUCT = "https://www.lahudky.cz/produkt/";
+var SHOP = "https://www.lahudky.cz/obchod/?add-to-cart=";
+var CART = "https://www.lahudky.cz/kosik/";
+var IMG = "https://www.lahudky.cz/wp-content/uploads/";
+var FREE_FROM = 3000;
+var wasFree = false;
+
+/* addId = ID pro ?add-to-cart (z e-shopu). Když chybí, otevře se stránka produktu. */
+var CATALOG = [
+  {id:"ch01", cat:"chleb", name:"Chlebíček šunkový s vejcem", price:43, vege:false, fish:false, slug:"chlebicek-sunkovy-s-vejcem", min:5, addId:165, img:"2020/04/sunka-s-vejcem-450x450.jpg"},
+  {id:"ch02", cat:"chleb", name:"Chlebíček šunkový na bramborovém salátu", price:39, vege:false, fish:false, slug:"chlebicek-sunkovy-95g", min:5, addId:138, img:"2020/03/sunka-s-bramborovym-salatem-450x450.jpg"},
+  {id:"ch03", cat:"chleb", name:"Chlebíček a´la krab", price:39, vege:false, fish:true, slug:"chlebicek-ala-krab", min:5, addId:140, img:"2020/03/krab-450x450.jpg"},
+  {id:"ch04", cat:"chleb", name:"Chlebíček hermelínový", price:43, vege:false, fish:false, slug:"chlebicek-hermelinovy", min:5, addId:157, img:"2020/03/hermelinova-450x450.jpg"},
+  {id:"ch05", cat:"chleb", name:"Chlebíček vaječný sypaný", price:43, vege:true, fish:false, slug:"chlebicek-vajecny-sypany", min:5, addId:182, img:"2020/03/vajecny-sypany-450x450.jpg"},
+  {id:"ch06", cat:"chleb", name:"Chlebíček moravský", price:39, vege:false, fish:false, slug:"chlebicek-moravsky", min:5, addId:162, img:"2019/03/moravsky-450x450.jpg"},
+  {id:"ch07", cat:"chleb", name:"Chlebíček roastbeef", price:46, vege:false, fish:false, slug:"chlebicek-roastbeef", min:5, addId:164, img:"2020/03/rostbeef-1-450x450.jpg"},
+  {id:"ch08", cat:"chleb", name:"Chlebíček s krkovicí a křenem", price:43, vege:false, fish:false, slug:"chlebicek-s-krkovici-a-krenem", min:5, addId:7614, img:"2020/03/krkovice-1-450x450.jpg"},
+  {id:"ch09", cat:"chleb", name:"Chlebíček se šunkou, herkulesem a eidamem", price:43, vege:false, fish:false, slug:"chlebicek-se-sunkou-herkulesem-a-eidamem", min:5, addId:375, img:"2020/03/sunka-herkules-a-eidam-450x450.jpg"},
+  {id:"ch10", cat:"chleb", name:"Chlebíček debrecínka", price:43, vege:false, fish:false, slug:"chlebicek-debrecinka", min:5, addId:141, img:"2020/03/Debrecinka-450x450.jpg"},
+  {id:"ch11", cat:"chleb", name:"Chlebíček s debrecínkou a eidamem", price:43, vege:false, fish:false, slug:"chlebicek-s-debrecinkou-a-eidamem", min:5, addId:377, img:"2019/03/debrecinka-s-eidamem-450x450.jpg"},
+  {id:"ch12", cat:"chleb", name:"Chlebíček sypaný šunkou", price:39, vege:false, fish:false, slug:"chlebicek-sypany-sunkou", min:5, addId:376, img:"2019/03/sypany-sunkou-450x450.jpg"},
+  {id:"ch13", cat:"chleb", name:"Chlebíček sýrový", price:43, vege:true, fish:false, slug:"chlebicek-syrovy", min:5, addId:166, img:"2019/03/syrovy-450x450.jpg"},
+  {id:"ch14", cat:"chleb", name:"Chlebíček s pravým uherákem PICK", price:46, vege:false, fish:false, slug:"chlebicek-s-pravym-uherakem-pick", min:5, addId:181, img:"2019/03/uherak-450x450.jpg"},
+  {id:"ch15", cat:"chleb", name:"Chlebíček gurmán", price:43, vege:false, fish:false, slug:"chlebicek-gurman", min:5, addId:179, img:"2019/03/gurman-450x450.jpg"},
+  {id:"ch16", cat:"chleb", name:"Chlebíček švédský", price:43, vege:false, fish:true, slug:"chlebicek-svedsky", min:5, addId:155, img:"2019/03/Svedsky-450x450.jpg"},
+  {id:"ch17", cat:"chleb", name:"Chlebíček šunkový na máslovém krému", price:39, vege:false, fish:false, slug:"chlebicek-sunkovy", min:5, addId:139, img:"2019/03/sunkovy-na-masle-450x450.jpg"},
+  {id:"ch18", cat:"chleb", name:"Chlebíček a´la čabaj", price:43, vege:false, fish:false, slug:"chlebicek-ala-cabaj", min:5, addId:178, img:"2019/03/cabaj-450x450.jpg"},
+  {id:"ch19", cat:"chleb", name:"Chlebíček herkulesový", price:43, vege:false, fish:false, slug:"chlebicek-herkulesovy", min:5, addId:156, img:"2019/03/herkulesovy-450x450.jpg"},
+  {id:"ch20", cat:"chleb", name:"Chlebíček rajčatový", price:39, vege:true, fish:false, slug:"chlebicek-rajcatovy", min:5, addId:158, img:"2019/03/rajcatovy-450x450.jpg"},
+  {id:"ch21", cat:"chleb", name:"Chlebíček debrecínka na másle", price:43, vege:false, fish:false, slug:"chlebicek-debrecinka-2", min:5, addId:142, img:"2019/03/Debrecinka-na-masle-1-450x450.jpg"},
+  {id:"ch22", cat:"chleb", name:"Chlebíček žervé", price:43, vege:true, fish:false, slug:"chlebicek-zerve", min:5, addId:180, img:"2019/03/zerve-450x450.jpg"},
+  {id:"ch23", cat:"chleb", name:"Chlebíček caprese", price:43, vege:true, fish:false, slug:"chlebicek-caprese", min:5, addId:327, img:"2019/03/caprese-1-450x450.jpg"},
+  {id:"ch24", cat:"chleb", name:"Chlebíček lososový", price:46, vege:false, fish:true, slug:"chlebicek-lososovy", min:5, addId:159, img:"2019/03/lososovy-1-450x450.jpg"},
+  {id:"ch26", cat:"chleb", name:"Chlebíček sardelový s očkem", price:43, vege:false, fish:true, slug:"chlebicek-sardelovy-s-ockem", min:5, addId:411, img:"2019/03/sardelovy-s-ockem-450x450.jpg"},
+  {id:"ch27", cat:"chleb", name:"Kvasový chléb s Cottage pomazánkou", price:43, vege:true, fish:false, slug:"kvasovy-chleb-s-cottage-pomazankou", min:5, addId:108103, img:"2026/01/Kvasovy-chleb-s-Cottage-pomazankou-450x450.jpg"},
+  {id:"ch28", cat:"chleb", name:"Kváskový chléb s vaječnou pomazánkou", price:43, vege:true, fish:false, slug:"kvaskovy-chleba-s-vajecnou-pomazankou", min:5, addId:10879, img:"2020/11/Chlebik-kvaskovy-s-vajecnou-pomazankou-1-450x450.jpg"},
+  {id:"ch29", cat:"chleb", name:"Kváskový chléb s rybí pomazánkou", price:43, vege:false, fish:true, slug:"kvaskovy-psenicno-zitny-chleba-s-rybi-pomazankou", min:5, addId:7601, img:"2020/04/Chlebik-kvaskovy-s-rybi-pomazankou-1-450x450.jpg"},
+  {id:"ch30", cat:"chleb", name:"Kváskový chléb se škvarkovou pomazánkou", price:43, vege:false, fish:false, slug:"kvaskovy-psenicno-zitny-chleba-se-skvarkovou-pomazankou", min:5, addId:7595, img:"2020/04/Chlebik-kvaskovy-se-skvarkovou-pomazankou--450x450.jpg"},
+  {id:"ch31", cat:"chleb", name:"Chlebíček chia s pažitkovou pomazánkou", price:43, vege:true, fish:false, slug:"chia-chlebicek-s-pazitkovou-pomazankou", min:5, addId:83031, img:"2025/04/LiberskeLahudky_lifestyle-6-kopie-450x450.jpg"},
+  {id:"ch32", cat:"chleb", name:"Chlebíček chia s avokádovou pomazánkou", price:49, vege:true, fish:false, slug:"chlebicek-chia-s-avokadovou-pomazankou", min:5, addId:8282, img:"2020/06/chlebik-Chia-s-avokadem-450x450.jpg"},
+  {id:"ch33", cat:"chleb", name:"Chlebíček chia s ředkvičkovou pomazánkou", price:43, vege:true, fish:false, slug:"chlebicek-chia-s-redkvickovou-pomazankou", min:5, addId:7593, img:"2020/04/P1_2980-450x450.jpg"},
+  {id:"ch34", cat:"chleb", name:"Chlebíček chia s mrkvovou pomazánkou", price:43, vege:true, fish:false, slug:"chlebicek-chia-s-mrkvovou-pomazankou", min:5, addId:184, img:"2019/03/chlebik-Chia-s-mrkvovou-pomazankou-450x450.jpg"},
+  {id:"ch35", cat:"chleb", name:"Chlebíček chia s červenou řepou", price:43, vege:true, fish:false, slug:"chlebicek-chia-s-cervenou-repou", min:5, addId:183, img:"2019/03/chlebik-Chija-cervena-repa-450x450.jpg"},
+  {id:"ch36", cat:"chleb", name:"Chlebíček Budějčák", price:46, vege:false, fish:false, slug:"chlebicek-budejcak", min:5, cb:true, addId:97375, img:"2025/10/Chlebicek-budejicak-1-450x450.jpg"},
+  {id:"ch37", cat:"chleb", name:"Chlebíček Jarní", price:42, vege:false, fish:false, slug:"chlebicek-jarni", min:5, cb:true, addId:97390, img:"2025/10/Jarni-chlebicek-Ceske-budejovice-liberske-lahudky-450x450.jpg"},
+  {id:"ka01", cat:"kan", name:"Kanapka šunková na bramborovém salátu", price:20, vege:false, fish:false, slug:"kanapka-sunkova-na-bramborovem-salatu", min:10, addId:16486, img:"2022/03/sunkova-na-bramborovam-kanapka-450x450.jpg"},
+  {id:"ka02", cat:"kan", name:"Kanapka šunková", price:20, vege:false, fish:false, slug:"kanapka-sunkova", min:10, addId:118, img:"2019/03/sunkova-kanapka-1-450x450.jpg"},
+  {id:"ka03", cat:"kan", name:"Kanapka hermelínová", price:20, vege:false, fish:false, slug:"kanapka-hermelinova", min:10, addId:122, img:"2019/03/hermelinova-kanapka-1-450x450.jpg"},
+  {id:"ka04", cat:"kan", name:"Kanapka roastbeef", price:25, vege:false, fish:false, slug:"kanapka-roastbeef", min:10, addId:135, img:"2019/03/rosbeef-kanapka-1-450x450.jpg"},
+  {id:"ka05", cat:"kan", name:"Kanapka a´la krab", price:20, vege:false, fish:true, slug:"kanapka-ala-krab", min:10, addId:119, img:"2019/03/krabi-kanapka-1-450x450.jpg"},
+  {id:"ka06", cat:"kan", name:"Kanapka česneková", price:20, vege:true, fish:false, slug:"kanapka-cesnekova", min:10, addId:126, img:"2019/03/cesnekova-kanapka-1-450x450.jpg"},
+  {id:"ka07", cat:"kan", name:"Kanapka gurmán", price:20, vege:false, fish:false, slug:"kanapka-gurman", min:10, addId:137, img:"2019/03/gurman-kanapka-1-450x450.jpg"},
+  {id:"ka08", cat:"kan", name:"Kanapka a´la čabaj", price:20, vege:false, fish:false, slug:"kanapka-ala-cabaj", min:10, addId:136, img:"2019/03/cabajkova-kanapka-1-450x450.jpg"},
+  {id:"ka09", cat:"kan", name:"Kanapka losos", price:23, vege:false, fish:true, slug:"kanapka-losos", min:10, addId:123, img:"2019/03/losova-kanapka-1-450x450.jpg"},
+  {id:"ka10", cat:"kan", name:"Kanapka s krkovicí a křenem", price:20, vege:false, fish:false, slug:"kanapka-s-krkovici-a-krenem", min:10, addId:8413, img:"2020/06/krkovice-s-krenem-kanapka-1-450x450.jpg"},
+  {id:"ka11", cat:"kan", name:"Kanapka s pomazánkou z červené řepy a vlašských ořechů", price:20, vege:true, fish:false, slug:"kanapka-s-pomazankou-z-cervene-repy-s-vlasskymi-orechy", min:10, addId:462, img:"2019/03/cervena-repa-kanapka-1-450x450.jpg"},
+  {id:"ka12", cat:"kan", name:"Kanapka caprese", price:20, vege:true, fish:false, slug:"kanapky-caprese", min:10, addId:464, img:"2019/03/caprese-kanapka-1-450x450.jpg"},
+  {id:"ka13", cat:"kan", name:"Kanapka debrecínka", price:20, vege:false, fish:false, slug:"kanapka-debrecinka", min:10, addId:120, img:"2019/03/debrecinka-kanapka-1-450x450.jpg"},
+  {id:"ka14", cat:"kan", name:"Kanapka se žervé a sušeným rajčetem", price:23, vege:true, fish:false, slug:"kanapka-se-zerve-a-susenym-rajcetem", min:10, addId:479, img:"2019/03/zerve-kanapka-1-450x450.jpg"},
+  {id:"ka15", cat:"kan", name:"Kanapka herkules", price:20, vege:false, fish:false, slug:"kanapka-herkules", min:10, addId:121, img:"2019/03/herkules-kanapka-1-450x450.jpg"},
+  {id:"ka16", cat:"kan", name:"Kanapka s moravským uzeným", price:20, vege:false, fish:false, slug:"kanapka-morava", min:10, addId:125, img:"2019/03/moravska-kanapka-1-450x450.jpg"},
+  {id:"ka17", cat:"kan", name:"Kanapka s mrkvovou pomazánkou", price:20, vege:true, fish:false, slug:"kanapka-s-mrkvovou-pomazankou", min:10, addId:463, img:"2019/03/mrkvova-kanapka-1-450x450.jpg"},
+  {id:"ka19", cat:"kan", name:"Kanapka se salámem fuet", price:25, vege:false, fish:false, slug:"kanapka-se-salamem-fuet", min:10, addId:478, img:"2019/03/fuet-kanapka-1-450x450.jpg"},
+  {id:"ka20", cat:"kan", name:"Kanapka s pažitkovou pomazánkou", price:20, vege:true, fish:false, slug:"kanapka-s-pazitkovou-pomazankou", min:10, addId:83036, img:"2025/10/s-pazitkovou-pomazankou-new-min-450x450.jpg"},
+  {id:"ka21", cat:"kan", name:"Kanapka s Cottage pomazánkou", price:20, vege:true, fish:false, slug:"kanapka-s-cottage-pomazankou", min:10, addId:108197, img:"2026/01/Kanapka-s-Cottage-pomazankou-450x450.jpg"},
+  {id:"ka22", cat:"kan", name:"Kanapka s uzeným lososem (premium)", price:33, vege:false, fish:true, slug:"kanapka-s-uzenym-lososem", min:10, addId:62737, img:"2024/08/Kanapka-s-uzenym-lososem-450x450.jpg"},
+  {id:"ka23", cat:"kan", name:"Kanapka s Nivou a hruškou (premium)", price:29, vege:true, fish:false, slug:"kanapka-s-nivou-a-hruskou", min:10, addId:62713, img:"2024/08/Kanapka-s-nivou-a-hruskou-450x450.jpg"},
+  {id:"ka24", cat:"kan", name:"Kanapka s trhaným vepřovým masem (premium)", price:29, vege:false, fish:false, slug:"kanapka-s-trhanym-veprovym-masem", min:10, addId:62733, img:"2025/10/Kanapka-s-trhanym-vepr-masem-min-450x450.jpg"},
+  {id:"ka25", cat:"kan", name:"Kanapka s kachní paštikou (premium)", price:33, vege:false, fish:false, slug:"kanapka-s-kachni-pastikou", min:10, addId:62730, img:"2024/08/Kanapka-s-kachni-pastikou-450x450.jpg"},
+  {id:"ka26", cat:"kan", name:"Kanapka s kozím sýrem (premium)", price:33, vege:true, fish:false, slug:"kanapka-s-kozim-syrem", min:10, addId:62724, img:"2024/08/Kanapka-s-kozim-syrem-450x450.jpg"},
+  {id:"ka27", cat:"kan", name:"Kanapka s uherským salámem PICK (premium)", price:25, vege:false, fish:false, slug:"kanapka-s-uherskym-salamem-pick", min:10, addId:62727, img:"2024/08/Kanapka-s-uherskym-salamem-450x450.jpg"},
+  {id:"ka28", cat:"kan", name:"Kanapka s uzeným pstruhem (premium)", price:29, vege:false, fish:true, slug:"kanapka-s-uzenym-pstruhem", min:10, addId:62720, img:"2024/08/Kanapka-s-uzenym-pstruhem-450x450.jpg"},
+  {id:"mi01", cat:"misa", name:"Obložená mísa mix", price:549, vege:false, fish:false, slug:"oblozena-misa-mix", min:1, unit:"mísa", addId:229, img:"2019/03/Oblozena-misa-mix-1-450x450.jpg"},
+  {id:"mi02", cat:"misa", name:"Obložená mísa zeleninová", price:449, vege:true, fish:false, slug:"oblozena-misa-zeleninova", min:1, unit:"mísa", addId:231, img:"2019/03/Oblozena-misa-zeleninova-1-450x450.jpg"},
+  {id:"mi03", cat:"misa", name:"Obložená mísa sýrová", price:549, vege:true, fish:false, slug:"oblozena-misa-syrova", min:1, unit:"mísa", addId:230, img:"2019/03/Oblozena-misa-syrova-1-450x450.jpg"},
+  {id:"mi04", cat:"misa", name:"Obložená mísa uzeninová", price:549, vege:false, fish:false, slug:"oblozena-misa-uzeninova", min:1, unit:"mísa", addId:232, img:"2019/03/Oblozena-misa-uzeninova-2-450x450.jpg"},
+  {id:"mi05", cat:"misa", name:"Obložená mísa z banketních kuřecích řízků", price:569, vege:false, fish:false, slug:"oblozena-misa-z-banketnich-kurecich-rizku", min:1, unit:"mísa", addId:394, img:"2019/03/řizky-500x500.jpg"},
+  {id:"mi06", cat:"misa", name:"Obložená mísa z banketních vepřových řízků", price:569, vege:false, fish:false, slug:"oblozena-misa-z-banketnich-veprovych-rizku", min:1, unit:"mísa", addId:395, img:"2019/03/řizky-500x500.jpg"},
+  {id:"mi07", cat:"misa", name:"Obložená mísa roastbeefová", price:790, vege:false, fish:false, slug:"oblozena-misa-roastbeefova", min:1, unit:"mísa", addId:393, img:"2019/03/Oblozena-misa-roastbeef-450x450.jpg"},
+  {id:"br01", cat:"brioska", name:"Brioška šunková", price:37, vege:false, fish:false, slug:"brioska-sunkova", min:1, addId:185, img:"2019/03/brioska1-500x500.jpg"},
+  {id:"br02", cat:"brioska", name:"Brioška sýrová", price:37, vege:true, fish:false, slug:"brioska-syrova", min:1, addId:188, img:"2019/03/brioska4-500x500.jpg"},
+  {id:"br03", cat:"brioska", name:"Brioška s vejci", price:37, vege:true, fish:false, slug:"brioska-s-vejci", min:1, addId:201, img:"2019/03/brioska6-500x500.jpg"},
+  {id:"br04", cat:"brioska", name:"Brioška krůtí", price:37, vege:false, fish:false, slug:"brioska-kruti", min:1, addId:187, img:"2019/03/brioska3-500x500.jpg"},
+  {id:"br05", cat:"brioska", name:"Brioška s moravským uzeným", price:37, vege:false, fish:false, slug:"brioska-s-moravskym-uzenym", min:1, addId:202, img:"2019/03/brioska5-500x500.jpg"},
+  {id:"br06", cat:"brioska", name:"Brioška herkulesová", price:37, vege:false, fish:false, slug:"brioska-herkulesova", min:1, addId:186, img:"2019/03/brioska2-500x500.jpg"},
+  {id:"br07", cat:"brioska", name:"Brioška a´la čabaj", price:37, vege:false, fish:false, slug:"brioska-ala-cabaj", min:1, addId:203, img:"2019/03/brioska8-500x500.jpg"},
+  {id:"bg01", cat:"bageta", name:"Špaldová bageta klasik", price:59, vege:false, fish:false, slug:"spaldova-bageta-klasik", min:1, addId:11159, img:"2020/12/Produkt-bageta-clasic-standart-500x500.jpg"},
+  {id:"bg02", cat:"bageta", name:"Špaldová bageta sýrová", price:59, vege:true, fish:false, slug:"spaldova-bageta-syrova", min:1, addId:11148, img:"2020/12/produkt-bageta-sýrová-standart-500x500.jpg"},
+  {id:"bg03", cat:"bageta", name:"Špaldová bageta kuřecí", price:65, vege:false, fish:false, slug:"spaldova-bageta-kureci", min:1, addId:11139, img:"2020/12/Produkt-bageta-kuřecí-standart-500x500.jpg"},
+  {id:"bg04", cat:"bageta", name:"Vícezrnná bageta MIX", price:59, vege:false, fish:false, slug:"vicezrnna-bageta-mix", min:1, addId:352, img:"2019/03/mix-tmavá-500x500.jpg"},
+  {id:"bg05", cat:"bageta", name:"Vícezrnná bageta sýrová", price:59, vege:true, fish:false, slug:"vicezrnna-bageta-syrova", min:1, addId:351, img:"2019/03/sýrová-tmavá-500x500.jpg"},
+  {id:"bg06", cat:"bageta", name:"Vícezrnná bageta kuřecí", price:65, vege:false, fish:false, slug:"vicezrnna-bageta-kureci", min:1, addId:370, img:"2019/03/kuřecí-tmavá-500x500.jpg"},
+  {id:"bg07", cat:"bageta", name:"Vícezrnná bageta šunková", price:59, vege:false, fish:false, slug:"vicezrnna-bageta-sunkova", min:1, addId:350, img:"2019/03/tmavá-šunková-500x500.jpg"},
+  {id:"bg08", cat:"bageta", name:"Vícezrnná bageta roastbeef", price:65, vege:false, fish:false, slug:"vicezrnna-bageta-roastbeef", min:1, addId:367, img:"2019/03/rosbief-tmavá-500x500.jpg"},
+  {id:"bg09", cat:"bageta", name:"Vícezrnná bageta tuňáková", price:65, vege:false, fish:true, slug:"vicezrnna-bageta-tunakova", min:1, addId:368, img:"2019/03/tuňák-tmavá-500x500.jpg"},
+  {id:"bg10", cat:"bageta", name:"Vícezrnná bageta anglická slanina", price:59, vege:false, fish:false, slug:"vicezrnna-bageta-anglicka-slanina", min:1, addId:366, img:"2019/03/moravské-tmavá-500x500.jpg"},
+  {id:"to01", cat:"toast", name:"Toast se šunkou", price:69, vege:false, fish:false, slug:"toast-se-sunkou", min:1, addId:483, img:"2019/03/toast-šuka-a-sýr-500x500.jpg"},
+  {id:"to02", cat:"toast", name:"Toast s roastbeefem", price:79, vege:false, fish:false, slug:"toast-s-roastbeefem", min:1, addId:488, img:"2019/03/toast-roastbeef-500x500.jpg"},
+  {id:"to03", cat:"toast", name:"Toast se sýrem", price:69, vege:true, fish:false, slug:"toast-se-syrem", min:1, addId:489, img:"2019/03/tmavý-toast-sýr-500x500.jpg"},
+  {id:"to04", cat:"toast", name:"Toast s kuřecím masem", price:79, vege:false, fish:false, slug:"toast-s-kurecim-masem", min:1, addId:482, img:"2019/03/toast-kuře-500x500.jpg"},
+  {id:"to05", cat:"toast", name:"Toast s lososem", price:79, vege:false, fish:true, slug:"toast-s-lososem", min:1, addId:486, img:"2019/03/tmavý-toast-losos-500x500.jpg"},
+  {id:"to06", cat:"toast", name:"Toast s vejcem", price:69, vege:true, fish:false, slug:"toast-s-vejcem", min:1, addId:484, img:"2019/03/toast-vejce-500x500.jpg"},
+  {id:"to07", cat:"toast", name:"Toast s tuňákem", price:69, vege:false, fish:true, slug:"toast-s-tunakem", min:1, addId:485, img:"2019/03/toast-tuňák-500x500.jpg"},
+  {id:"to08", cat:"toast", name:"Toast s anglickou slaninou", price:69, vege:false, fish:false, slug:"toast-s-anglickou-slaninou", min:1, addId:487, img:"2019/03/toast-slanina-500x500.jpg"},
+  {id:"tt01", cat:"tortilla", name:"Tortilla s kuřecím masem", price:79, vege:false, fish:false, slug:"tortilla-s-kurecim-masem", min:1, addId:389, img:"2019/03/tortila-kuřecí-900-x-600-500x500.jpg"},
+  {id:"tt02", cat:"tortilla", name:"Tortilla s hovězím masem", price:79, vege:false, fish:false, slug:"tortilla-s-hovezim-masem", min:1, addId:390, img:"2019/03/tortila-hovězí-900-x-600-500x500.jpg"},
+  {id:"tt03", cat:"tortilla", name:"Tortilla Jackfruit", price:79, vege:true, fish:false, slug:"tortilla-jackfruit", min:1, addId:96935, img:"2025/10/tortila-jackfruit-900-x-600-450x450.jpg"},
+  {id:"ho01", cat:"houska", name:"Svačinová houska se šunkou a sýrem", price:49, vege:false, fish:false, slug:"svacinova-houska-se-sunkou-a-syrem", min:1, addId:31528, img:"2022/11/25-dodelavka-450x450.jpg"},
+  {id:"ho02", cat:"houska", name:"Svačinová houska se šunkovým salámem", price:49, vege:false, fish:false, slug:"svacinova-houska-se-sunkovym-salamem", min:1, addId:31550, img:"2022/11/27-450x450.jpg"},
+  {id:"ho03", cat:"houska", name:"Svačinová houska s pravým uherákem", price:59, vege:false, fish:false, slug:"svacinova-houska-s-pravym-uherakem", min:1, addId:31042, img:"2022/11/25-450x450.jpg"},
+  {id:"bu01", cat:"burger", name:"BOX Mini burgery s vepřovým trhaným masem (9 ks)", price:441, vege:false, fish:false, slug:"mini-burger-s-veprovym-trhanym-masem", min:1, unit:"box", addId:122361, img:"2026/04/Liberske-lahudky-miniburger-s-jackfruit-450x450.jpg"},
+  {id:"bu02", cat:"burger", name:"BOX Mini burgery DUO (9 ks)", price:441, vege:false, fish:false, slug:"box-mini-burgery-duo-9-ks", min:1, unit:"box", addId:123371, img:"2026/05/Liberske-lahudky-miniburgery-DUO-450x450.jpg"},
+  {id:"bu03", cat:"burger", name:"BOX Mini burgery s Jackfruit (9 ks)", price:441, vege:true, fish:false, slug:"mini-burger-s-jackfruit", min:1, unit:"box", addId:122350, img:"2026/04/Liberske-lahudky-miniburger-s-trhanym-masem-450x450.jpg"},
+  {id:"ht01", cat:"hotove", name:"Kuřecí řízek s bramborovým salátem", price:119, vege:false, fish:false, slug:"kureci-rizek-s-bramborovym-salatem", min:1, addId:2122, img:"2019/08/Kureci-rizek-s-bramborovym-salatem-450x450.jpg"},
+  {id:"ht02", cat:"hotove", name:"Kuřecí stripsy s kaší", price:124, vege:false, fish:false, slug:"kureci-stripsy-s-kasi", min:1, addId:10433, img:"2020/11/Kuř.-stripsy-s-kaší-500x500.jpg"},
+  {id:"ht03", cat:"hotove", name:"Smažený sýr s bramborem a tatarkou", price:115, vege:true, fish:false, slug:"smazeny-syr-s-bramborem-a-tatarkou", min:1, addId:10427, img:"2020/11/5U4A6078-450x450.jpg"},
+  {id:"ht04", cat:"hotove", name:"Karbanátek s bramborovou kaší", price:119, vege:false, fish:false, slug:"vyberovy-karbanatek-s-kasi", min:1, addId:10435, img:"2020/11/Karbanátek-s-kaší-500x500.jpg"},
+  {id:"ht05", cat:"hotove", name:"Smažený květák s bramborem a tatarkou", price:115, vege:true, fish:false, slug:"smazeny-kvetak-s-bramborem-a-tatarkou", min:1, addId:10431, img:"2020/11/Kvetak-s-bramborem-a-tatarkou-450x450.jpg"},
+  {id:"ht06", cat:"hotove", name:"Smažená treska s kaší", price:125, vege:false, fish:true, slug:"smazena-treska-s-kasi", min:1, addId:10470, img:"2020/11/Smažená-treska-s-kaší-TALIR-500x500.jpg"},
+  {id:"sm01", cat:"smazene", name:"Bramborák", price:32, vege:true, fish:false, slug:"bramborak", min:1, addId:253, img:"2019/03/bramborak-obyč-500x500.jpg"},
+  {id:"sm02", cat:"smazene", name:"Bramborák s uzeným", price:36, vege:false, fish:false, slug:"bramborak-s-uzenym", min:1, addId:254, img:"2019/03/bramborak-uzene--500x500.jpg"},
+  {id:"sm03", cat:"smazene", name:"Bramborák s kuřecím masem", price:36, vege:false, fish:false, slug:"bramborak-s-kurecim-masem", min:1, addId:255, img:"2019/03/bramborak-s-kuřecím-500x500.jpg"},
+  {id:"sm04", cat:"smazene", name:"Placičky brokolicovo-květákové", price:20, vege:true, fish:false, slug:"placicky-brokolicovo-kvetakove", min:1, addId:281, img:"2019/03/zeleninová-placička-s-brokolici-500x500.jpg"},
+  {id:"sm05", cat:"smazene", name:"Placka bramborová", price:20, vege:true, fish:false, slug:"placka-bramborova", min:1, addId:296, img:"2019/03/brmborova-placka-500x500.jpg"},
+  {id:"sm06", cat:"smazene", name:"Řízek banketní kuřecí", price:419, vege:false, fish:false, slug:"rizek-banketni-kureci", min:1, unit:"kg", addId:263, img:"2019/03/banketní-řízek-500x500.jpg"},
+  {id:"sm07", cat:"smazene", name:"Řízek banketní vepřový", price:419, vege:false, fish:false, slug:"rizek-banketni-veprovy", min:1, unit:"kg", addId:264, img:"2019/03/banketní-řízek-500x500.jpg"},
+  {id:"sm08", cat:"smazene", name:"Strips – kuřecí", price:399, vege:false, fish:false, slug:"strips-kureci", min:1, unit:"kg", addId:262, img:"2019/03/strips-500x500.jpg"},
+  {id:"sm09", cat:"smazene", name:"Řízek kuřecí / prsní", price:399, vege:false, fish:false, slug:"rizek-kureci", min:1, unit:"kg", addId:259, img:"2019/03/rizek-500x500.jpg"},
+  {id:"sm10", cat:"smazene", name:"Smažený květák", price:279, vege:true, fish:false, slug:"smazeny-kvetak", min:1, unit:"kg", addId:279, img:"2019/03/květák-500x500.jpg"},
+  {id:"sm11", cat:"smazene", name:"Řízek kuřecí – stehenní", price:359, vege:false, fish:false, slug:"rizek-kureci-stehenni", min:1, unit:"kg", addId:346, img:"2019/03/Bez_názvu11-500x500.jpg"},
+  {id:"sm12", cat:"smazene", name:"Řízek vepřový", price:399, vege:false, fish:false, slug:"rizek-veprovy", min:1, unit:"kg", addId:260, img:"2019/03/rizek-500x500.jpg"},
+  {id:"sm13", cat:"smazene", name:"Kapustový karbanátek", price:319, vege:true, fish:false, slug:"kapustovy-karbanatek", min:1, unit:"kg", addId:10893, img:"2020/11/Kapustový-karbanátek-500x500.jpg"},
+  {id:"sm14", cat:"smazene", name:"Smažený Eidam", price:389, vege:true, fish:false, slug:"smazeny-eidam", min:1, unit:"kg", addId:277, img:"2019/03/syr-500x500.jpg"},
+  {id:"sm15", cat:"smazene", name:"Řízek holandský", price:389, vege:false, fish:false, slug:"rizek-holandsky", min:1, unit:"kg", addId:273, img:"2019/03/holandský-500x500.jpg"},
+  {id:"sm16", cat:"smazene", name:"Karbanátek", price:379, vege:false, fish:false, slug:"karbanatek", min:1, unit:"kg", addId:258, img:"2019/03/karbanatek-500x500.jpg"},
+  {id:"sm17", cat:"smazene", name:"Filé z aljašské tresky", price:429, vege:false, fish:true, slug:"file-z-aljasske-tresky", min:1, unit:"kg", addId:274, img:"2019/03/file-treska-500x500.jpg"},
+  {id:"as01", cat:"aspik", name:"Obložený chléb se smaženkou", price:49, vege:true, fish:false, slug:"oblozeny-chleb-se-smazenkou", min:1, addId:257, img:"2019/03/smaženka-500x500.jpg"},
+  {id:"as02", cat:"aspik", name:"Vejce henri", price:49, vege:false, fish:false, slug:"vejce-henri", min:1, addId:209, img:"2019/03/Henry-vejce-450x450.jpg"},
+  {id:"as03", cat:"aspik", name:"Šunková rolka v aspiku", price:39, vege:false, fish:false, slug:"aspikova-rolka", min:1, addId:345, img:"2019/03/Aspikova-rolka-1-450x450.jpg"},
+  {id:"sa01", cat:"salat", name:"Bramborový salát", price:199, vege:false, fish:false, slug:"bramborovy-salat", min:1, unit:"kg", addId:28, img:"2019/03/JPGBramborový-s-vejci-500x500.jpg"},
+  {id:"sa02", cat:"salat", name:"Salát zelný „Coleslaw“", price:199, vege:true, fish:false, slug:"salat-zelny-coleslaw", min:1, unit:"kg", addId:23, img:"2019/03/JPGZelny-500x500.jpg"},
+  {id:"sa03", cat:"salat", name:"Salát pochoutkový", price:209, vege:false, fish:false, slug:"salat-pochoutkovy", min:1, unit:"kg", addId:372, img:"2019/03/JPGPochoutkový-500x500.jpg"},
+  {id:"sa04", cat:"salat", name:"Salát celerový", price:209, vege:false, fish:false, slug:"salat-celerovy", min:1, unit:"kg", addId:30, img:"2019/03/JPGCelerový-500x500.jpg"},
+  {id:"sa05", cat:"salat", name:"Salát holandský sýrový", price:239, vege:false, fish:false, slug:"salat-holandsky-syrovy", min:1, unit:"kg", addId:99, img:"2019/03/JPGHolandský-sýrový-500x500.jpg"},
+  {id:"sa06", cat:"salat", name:"Salát vaječný", price:239, vege:true, fish:false, slug:"salat-vajecny-2", min:1, unit:"kg", addId:79, img:"2019/03/JPGVajíčkový-500x500.jpg"},
+  {id:"sa07", cat:"salat", name:"Salát camping", price:209, vege:false, fish:false, slug:"salat-camping", min:1, unit:"kg", addId:414, img:"2019/03/camping-500x500.jpg"},
+  {id:"sa08", cat:"salat", name:"Salát rajčatový", price:199, vege:true, fish:false, slug:"salat-rajcatovy", min:1, unit:"kg", addId:20, img:"2019/03/JPGRajská-jablka-500x500.jpg"},
+  {id:"sa09", cat:"salat", name:"Salát Rumcajs", price:229, vege:false, fish:false, slug:"salat-rumcajs", min:1, unit:"kg", addId:78, img:"2019/03/JPGRumcajs-500x500.jpg"},
+  {id:"sa10", cat:"salat", name:"Salát rybí (křišťálový sleď)", price:239, vege:false, fish:true, slug:"salat-rybi-kristalovy-sled", min:1, unit:"kg", addId:371, img:"2019/03/JPGRybí-500x500.jpg"},
+  {id:"sa11", cat:"salat", name:"Salát řecký", price:205, vege:true, fish:false, slug:"salat-recky-2", min:1, unit:"kg", addId:452, img:"2019/03/řecký-500x500.jpg"},
+  {id:"sa12", cat:"salat", name:"Salát cizrna s quinoou", price:255, vege:true, fish:false, slug:"salat-cizrna-s-quinoou", min:1, unit:"kg", addId:2054, img:"2020/06/Liberske-lahudky-baleny-salat-pomazanka-cizrnovy-3-450x450.jpg"},
+  {id:"sa13", cat:"salat", name:"Salát zelný se zeleninou", price:199, vege:true, fish:false, slug:"salat-zelny-se-zeleninou", min:1, unit:"kg", addId:439, img:"2019/03/zelný-se-zeleninou--500x500.jpg"},
+  {id:"sa14", cat:"salat", name:"Salát mrkvový s ananasem", price:199, vege:true, fish:false, slug:"salat-mrkvovy-s-ananasem", min:1, unit:"kg", addId:77, img:"2019/03/JPGMrkvový-s-ananasem-500x500.jpg"},
+  {id:"sa15", cat:"salat", name:"Salát pikantní buřtíky", price:205, vege:false, fish:false, slug:"salat-pikantni-burtiky", min:1, unit:"kg", addId:24, img:"2019/03/JPGPikantné-buřtíky-500x500.jpg"},
+  {id:"sa16", cat:"salat", name:"Salát feferónový se sýrem a ořechy", price:259, vege:false, fish:false, slug:"salat-feferonovy-se-syrem", min:1, unit:"kg", addId:442, img:"2019/03/feferonkový-salát-se-sýrem-500x500.jpg"},
+  {id:"po01", cat:"pomazanka", name:"Pomazánka vaječná", price:269, vege:true, fish:false, slug:"pomazanka-vajecna", min:1, unit:"kg", addId:91, img:"2019/03/pomazánka-vajíčková-500x500.jpg"},
+  {id:"po02", cat:"pomazanka", name:"Pomazánka hermelínová", price:279, vege:false, fish:false, slug:"pomazanka-hermelinova", min:1, unit:"kg", addId:95, img:"2019/03/pomazánka-hermelínovávv-500x500.jpg"},
+  {id:"po03", cat:"pomazanka", name:"Pomazánka tuňáková", price:339, vege:false, fish:true, slug:"pomazanka-tunakova", min:1, unit:"kg", addId:332, img:"2019/03/pomazánka-tuňáková-500x500.jpg"},
+  {id:"po04", cat:"pomazanka", name:"Pomazánka česneková", price:219, vege:true, fish:false, slug:"pomazanka-cesnekova", min:1, unit:"kg", addId:97, img:"2019/03/pomazánka-česneková-500x500.jpg"},
+  {id:"po05", cat:"pomazanka", name:"Pomazánka z červené řepy", price:219, vege:true, fish:false, slug:"pomazanka-z-cervene-repy", min:1, unit:"kg", addId:93, img:"2019/03/pomazánka-červená-řepa-2-500x500.jpg"},
+  {id:"po06", cat:"pomazanka", name:"Pomazánka pažitková", price:299, vege:true, fish:false, slug:"pomazanka-pazitkova", min:1, unit:"kg", addId:460, img:"2019/03/pažitková-pomazánka--500x500.jpg"},
+  {id:"po07", cat:"pomazanka", name:"Pomazánka a´la krab", price:249, vege:false, fish:true, slug:"pomazanka-ala-krab", min:1, unit:"kg", addId:96, img:"2019/03/krabí-pomazánka-500x500.jpg"},
+  {id:"po08", cat:"pomazanka", name:"Pomazánka mrkvová s žervé", price:269, vege:true, fish:false, slug:"pomazanka-mrkvova-s-zerve", min:1, unit:"kg", addId:94, img:"2019/03/pomazanka-mrkv-žervé-500x500.jpg"},
+  {id:"po09", cat:"pomazanka", name:"Pomazánka Budapešť", price:249, vege:false, fish:false, slug:"pomazanka-budapest", min:1, unit:"kg", addId:98, img:"2019/03/pomazánka-budapest-500x500.jpg"},
+  {id:"ba01", cat:"balene", name:"Salát s kuskusem 180g", price:49, vege:true, fish:false, slug:"salat-s-couscousem", min:1, addId:72, img:"2020/06/Liberske-lahudky-baleny-salat-pomazanka-kuskus-03-450x450.jpg"},
+  {id:"ba02", cat:"balene", name:"Salát s červenou čočkou a rukolou 180g", price:49, vege:true, fish:false, slug:"salat-s-cervenou-cockou", min:1, addId:71, img:"2020/06/Liberske-lahudky-baleny-salat-pomazanka-cockovy3-450x450.jpg"},
+  {id:"ba03", cat:"balene", name:"Salát cizrna s quinoou 180g", price:49, vege:true, fish:false, slug:"salat-cizrna-s-quinoou-kopirovat", min:1, addId:328, img:"2020/06/Liberske-lahudky-baleny-salat-pomazanka-cizrnovy-3-450x450.jpg"},
+  {id:"ba04", cat:"balene", name:"Pomazánka a la krab 180g", price:49, vege:false, fish:true, slug:"pomazanka-a-la-krab-2", min:1, addId:8398, img:"2020/06/Liberske-lahudky-baleny-salat-pomazanka-a-la-krab3-450x450.jpg"},
+  {id:"ba05", cat:"balene", name:"Hermelínová pomazánka 180g", price:49, vege:false, fish:false, slug:"hermelinova-pomazanka", min:1, addId:8400, img:"2020/06/Liberske-lahudky-baleny-salat-pomazanka-hermelinova-3-450x450.jpg"},
+  {id:"de01", cat:"dezert", name:"Panna cotta malina", price:65, vege:true, fish:false, slug:"panna-cotta-malina-2", min:1, addId:851, img:"2025/11/Panna-cotta-malina-450x450.png"},
+  {id:"de02", cat:"dezert", name:"Tiramisu", price:65, vege:true, fish:false, slug:"tiramisu", min:1, addId:347, img:"2025/11/Tiramisu-450x450.png"},
+  {id:"de03", cat:"dezert", name:"Jahody v zakysané smetaně", price:65, vege:true, fish:false, slug:"jahody-v-zakysane-smetane-vicko", min:1, addId:852, img:"2025/11/Jahody-v-zakysane-smetane-450x450.png"},
+  {id:"de04", cat:"dezert", name:"Mascarpone s borůvkami", price:69, vege:true, fish:false, slug:"mascarpone-s-boruvkami", min:1, addId:101, img:"2025/11/Mascarpone-s-boruvkami-450x450.png"},
+  {id:"de05", cat:"dezert", name:"Panna cotta borůvka", price:65, vege:true, fish:false, slug:"panna-cotta-boruvka-vicko", min:1, addId:850, img:"2025/11/20260214_0947_Image-Generation_remix_01khdna45bevdsca3zr1t72dx5-450x450.png"},
+  {id:"de06", cat:"dezert", name:"Chia pudink s mangem", price:65, vege:true, fish:false, slug:"jahody-v-zakysane-smetane", min:1, addId:116, img:"2025/11/Chia-pudink-s-mangem-450x450.png"},
+  {id:"de07", cat:"dezert", name:"Kokočoko – tvarohový dezert s čokoládou", price:65, vege:true, fish:false, slug:"kokocoko-tvarohovy-dezert-s-cokoladou", min:1, addId:10888, img:"2020/11/Koko-coko-dezert-450x450.png"},
+  {id:"de08", cat:"dezert", name:"Čoko krém", price:65, vege:true, fish:false, slug:"coko-krem-vicko", min:1, addId:849, img:"2019/04/coko-krem-450x450.png"},
+  {id:"de10", cat:"dezert", name:"Mascarpone s jablky", price:65, vege:true, fish:false, slug:"mascarpone-s-jablky-kod-956", min:1, addId:506, img:"2019/03/Mascarpone-s-jablky-450x450.png"},
+  {id:"de11", cat:"dezert", name:"Dezert s pistáciovým krémem", price:69, vege:true, fish:false, slug:"dezert-s-pistaciovym-kremem", min:1, addId:55325, img:"2024/04/Dezert-s-pistaciovym-kremem-450x450.png"},
+  {id:"kl01", cat:"kolacek", name:"Koláček linecký – meruňka", price:15, vege:true, fish:false, slug:"kolacek-linecky-merunka", min:5, addId:36, img:"2019/03/SP1_7158-500x500.jpg"},
+  {id:"kl02", cat:"kolacek", name:"Koláček linecký – malina", price:15, vege:true, fish:false, slug:"kolacek-linecky-malina", min:5, addId:35, img:"2019/03/SP1_7166-500x500.jpg"},
+  {id:"kl03", cat:"kolacek", name:"Koláček linecký – povidla", price:15, vege:true, fish:false, slug:"kolacek-linecky-povidla", min:5, addId:39, img:"2019/03/SP1_7169-500x500.jpg"},
+  {id:"kl04", cat:"kolacek", name:"Koláček linecký – ořech", price:15, vege:true, fish:false, slug:"kolacek-linecky-orech", min:5, addId:38, img:"2019/03/SP1_7173-500x500.jpg"},
+  {id:"kl05", cat:"kolacek", name:"Koláček linecký – mák", price:15, vege:true, fish:false, slug:"kolacek-linecky-mak", min:5, addId:37, img:"2019/03/SP1_7156-500x500.jpg"},
+  {id:"kl06", cat:"kolacek", name:"Koláček svatební – tvaroh", price:17, vege:true, fish:false, slug:"kolacek-svatebni-tvaroh", min:5, addId:41, img:"2019/03/SP1_7111-500x500.jpg"},
+  {id:"kl07", cat:"kolacek", name:"Koláček svatební – povidlo", price:17, vege:true, fish:false, slug:"kolacek-svatebni-povidlo", min:5, addId:43, img:"2019/03/SP1_7134-500x500.jpg"},
+  {id:"kl08", cat:"kolacek", name:"Koláček svatební – mák", price:17, vege:true, fish:false, slug:"kolacek-svatebni-mak", min:5, addId:40, img:"2019/03/SP1_7085-500x500.jpg"},
+  {id:"kl09", cat:"kolacek", name:"Koláček svatební – ořech", price:17, vege:true, fish:false, slug:"kolacek-svatebni-orech", min:5, addId:44, img:"2019/03/SP1_7100-500x500.jpg"},
+  {id:"kl10", cat:"kolacek", name:"Koláček svatební – jablko", price:17, vege:true, fish:false, slug:"kolacek-svatebni-jablko", min:5, addId:30307, img:"2019/03/SP1_7115-500x500.jpg"},
+  {id:"kl11", cat:"kolacek", name:"Koláček orlický – tvaroh", price:16, vege:true, fish:false, slug:"kolacek-orlicky-tvaroh", min:5, addId:27063, img:"2022/08/P1_0880-450x450.jpg"},
+  {id:"kl12", cat:"kolacek", name:"Koláček orlický – meruňka", price:16, vege:true, fish:false, slug:"kolacek-orlicky-merunka", min:5, addId:42, img:"2022/08/merunkovy-orlicky-kolac-450x450.jpg"},
+  {id:"kl13", cat:"kolacek", name:"Koláček orlický – povidla", price:16, vege:true, fish:false, slug:"kolacek-orlicky-povidla", min:5, addId:27076, img:"2022/08/P1_0883-450x450.jpg"},
+  {id:"kl14", cat:"kolacek", name:"Koláček orlický – ořech", price:16, vege:true, fish:false, slug:"kolacek-orlicky-orech", min:5, addId:27066, img:"2022/08/P1_0894-1-450x450.jpg"},
+  {id:"kl15", cat:"kolacek", name:"Koláček orlický – mák", price:16, vege:true, fish:false, slug:"kolacek-orlicky-mak", min:5, addId:27072, img:"2022/08/P1_0892-450x450.jpg"},
+  {id:"ko01", cat:"kolac", name:"Koláč tvarohový", price:39, vege:true, fish:false, slug:"kolac-tvarohovy", min:1, addId:321, img:"2019/03/tvarohový-orez-500x500.jpg"},
+  {id:"ko02", cat:"kolac", name:"Koláč borůvkový", price:39, vege:true, fish:false, slug:"kolac-boruvkovy", min:1, addId:325, img:"2019/03/boruvkovy-orez-500x500.jpg"},
+  {id:"ko03", cat:"kolac", name:"Koláč borůvkovo-tvarohový", price:39, vege:true, fish:false, slug:"kolac-boruvkovo-tvarohovy", min:1, addId:343, img:"2019/03/boruvka_kolac1-500x500.jpg"},
+  {id:"ko04", cat:"kolac", name:"Koláč meruňkový", price:39, vege:true, fish:false, slug:"kolac-merunkovy", min:1, addId:302, img:"2019/03/merunkovy-orez2-500x500.jpg"},
+  {id:"ko05", cat:"kolac", name:"Koláč povidlový", price:39, vege:true, fish:false, slug:"kolac-povidlovy", min:1, addId:322, img:"2019/03/povidla-orez-500x500.jpg"},
+  {id:"ko06", cat:"kolac", name:"Koláč makový", price:39, vege:true, fish:false, slug:"kolac-makovy", min:1, addId:297, img:"2019/03/makový-orez-500x500.jpg"},
+  {id:"ko07", cat:"kolac", name:"Koláč jahodový", price:39, vege:true, fish:false, slug:"kolac-jahodovy", min:1, addId:323, img:"2019/03/jahoda-orez-500x500.jpg"},
+  {id:"ko08", cat:"kolac", name:"Koláč se švestkami a mákem", price:39, vege:true, fish:false, slug:"kolac-svestkovy", min:1, addId:329, img:"2019/03/kolac-švestkový-kopie-500x500.jpg"},
+  {id:"ko09", cat:"kolac", name:"Koláč ořechový", price:39, vege:true, fish:false, slug:"kolac-orechovy", min:1, addId:298, img:"2019/03/ořech-orez-500x500.jpg"},
+  {id:"ko10", cat:"kolac", name:"Koláč hruškový", price:39, vege:true, fish:false, slug:"kolac-hruskovy", min:1, addId:300, img:"2019/03/hruškový-orez-500x500.jpg"},
+  {id:"ko11", cat:"kolac", name:"Koláč malinový", price:39, vege:true, fish:false, slug:"kolac-malina", min:1, addId:855, img:"2019/03/malina-orez-500x500.jpg"},
+  {id:"ko12", cat:"kolac", name:"Koláč s rebarborou a jablky", price:39, vege:true, fish:false, slug:"kolac-s-rebarborou-a-jablky", min:1, addId:330, img:"2019/03/kolac-moravsky-rebrbora-500x500.jpg"},
+  {id:"ko13", cat:"kolac", name:"Koláč višňový", price:39, vege:true, fish:false, slug:"kolac-visnovy", min:1, addId:324, img:"2019/03/višen-orez-500x500.jpg"},
+  {id:"ko14", cat:"kolac", name:"Koláč jablečný", price:39, vege:true, fish:false, slug:"kolac-jablkovy", min:1, addId:326, img:"2019/03/jablko-orez-500x500.jpg"},
+  {id:"ko15", cat:"kolac", name:"Koláč mrkvový – krájený", price:39, vege:true, fish:false, slug:"kolac-krajeny-mrkvovy", min:1, addId:304, img:"2019/03/mrkvovy-kolac-1-450x450.jpg"},
+  {id:"ko16", cat:"kolac", name:"Koláč tříbarevný – krájený", price:39, vege:true, fish:false, slug:"kolac-krajeny-tribarevny", min:1, addId:344, img:"2019/03/tribarevny-kolac-1-450x450.jpg"},
+  {id:"ko17", cat:"kolac", name:"Koláč perník krájený", price:33, vege:true, fish:false, slug:"kolac-krajeny-pernik", min:1, addId:305, img:"2019/03/pernik-450x450.jpg"},
+  {id:"bh01", cat:"buchta", name:"Staročeská buchta povidlová", price:29, vege:true, fish:false, slug:"staroceske-buchta-povidlova", min:1, addId:901, img:"2019/04/Staroceska-buchta-tvarohova-450x450.jpg"},
+  {id:"bh02", cat:"buchta", name:"Staročeská buchta tvarohová", price:29, vege:true, fish:false, slug:"staroceske-buchta-tvarohova-makova-povidlova", min:1, addId:349, img:"2019/04/Staroceska-buchta-tvarohova-450x450.jpg"},
+  {id:"bh03", cat:"buchta", name:"Staročeská buchta maková", price:29, vege:true, fish:false, slug:"staroceske-buchta-makova", min:1, addId:900, img:"2019/04/Staroceska-buchta-tvarohova-450x450.jpg"},
+  {id:"za01", cat:"zavin", name:"Jablečný závin", price:33, vege:true, fish:false, slug:"jablecny-zavin", min:1, addId:397, img:"2019/03/jablecny-strudl-450x450.png"},
+  {id:"za02", cat:"zavin", name:"Závin s tvarohem a višní", price:35, vege:true, fish:false, slug:"zavin-s-tvarohem-a-visni", min:1, addId:396, img:"2019/04/tvarohovy-zavin-450x450.png"},
+  {id:"za03", cat:"zavin", name:"Makový závin se švestkou", price:35, vege:true, fish:false, slug:"makovy-zavin-se-svestkou", min:1, addId:398, img:"2019/03/Makovy-zavin-450x450.jpg"},
+  {id:"pe01", cat:"pecivo", name:"Banketní rohlíček vícezrnný", price:10, vege:true, fish:false, slug:"banketni-rohlicek-vicezrnny", min:1, addId:122136, img:"2026/04/Banketni-rohlicek-spaldovy-450x450.jpg"},
+  {id:"pe02", cat:"pecivo", name:"Banketní rohlíček špaldový", price:10, vege:true, fish:false, slug:"banketni-rohlicek-spaldovy", min:1, addId:122130, img:"2026/04/Banketni-rohlicek-vicezrnny-450x450.jpg"},
+  {id:"pe03", cat:"pecivo", name:"Libeřský chléb", price:59, vege:true, fish:false, slug:"libersky-chleb", min:1, addId:112046, img:"2026/04/Libersky-chleb-450x450.jpg"},
+  {id:"dort01", cat:"dort", name:"Chlebíčkový dort (680 g)", price:459, vege:false, fish:false, slug:"chlebickovy-dort", min:1, addId:112053, img:"2026/02/Chlebickovy-dort-Liberske-lahudky-netradicni-dort-450x450.jpg"},
+  {id:"de13", cat:"dezert", name:"Řecký jogurt s granolou", price:79, vege:true, fish:false, slug:"recky-jogurt-s-granolou", min:1, addId:122967, img:"2026/05/recky-jogurt-s-granolou-450x450.jpg"},
+  {id:"de14", cat:"dezert", name:"Dezert s maracujou", price:65, vege:true, fish:false, slug:"dezert-s-maracujou", min:1, addId:122369, img:"2026/04/Dezert-s-maracujou-450x450.jpg"},
+  {id:"ko18", cat:"kolac", name:"Hraběnčiny řezy – krájené", price:39, vege:true, fish:false, slug:"hrabenciny-rezy-krajene", min:5, addId:889},
+  {id:"kv01", cat:"kolacekvaha", name:"Svatební koláček na váhu – mix", price:480, vege:true, fish:false, slug:"kolacek-svatebni-na-vahu-mix", min:1, unit:"kg", rec:true, addId:7637, img:"2020/04/kolacek-svatebni-mix-450x450.jpg"},
+  {id:"kv02", cat:"kolacekvaha", name:"Svatební koláček na váhu – tvaroh", price:480, vege:true, fish:false, slug:"kolacek-svatebni-na-vahu-tvaroh", min:1, unit:"kg", addId:67, img:"2019/03/Vážený-tvarohový-500x500.jpg"},
+  {id:"kv03", cat:"kolacekvaha", name:"Svatební koláček na váhu – povidla", price:480, vege:true, fish:false, slug:"kolacek-svatebni-na-vahu-povidla", min:1, unit:"kg", addId:69, img:"2019/03/Vážený-povidlový-500x500.jpg"},
+  {id:"kv04", cat:"kolacekvaha", name:"Svatební koláček na váhu – jablko", price:480, vege:true, fish:false, slug:"kolacek-svatebni-na-vahu-jablko", min:1, unit:"kg", addId:70, img:"2019/03/Vážený-jablečný-500x500.jpg"},
+  {id:"kv05", cat:"kolacekvaha", name:"Svatební koláček na váhu – ořech", price:480, vege:true, fish:false, slug:"kolacek-svatebni-na-vahu-orech", min:1, unit:"kg", addId:68, img:"2019/03/Vážený-ořechový-500x500.jpg"},
+  {id:"kv06", cat:"kolacekvaha", name:"Svatební koláček na váhu – mák", price:480, vege:true, fish:false, slug:"kolacek-svatebni-na-vahu-mak", min:1, unit:"kg", addId:66, img:"2019/03/Vážený-makový-500x500.jpg"}
+];
+
+var BYID = {};
+(function(){ var i; for(i=0;i<CATALOG.length;i++){ BYID[CATALOG[i].id] = CATALOG[i]; } })();
+
+var cart = [];
+var seed = 12345;
+var lastSettings = null;
+
+function rng(){ seed = (seed*1664525+1013904223)%4294967296; return seed/4294967296; }
+function shuffle(arr){ var a=arr.slice(),i,j,t; for(i=a.length-1;i>0;i--){ j=Math.floor(rng()*(i+1)); t=a[i];a[i]=a[j];a[j]=t; } return a; }
+function fmt(n){ var s=String(Math.round(n)),out="",c=0,i; for(i=s.length-1;i>=0;i--){ out=s.charAt(i)+out; c++; if(c%3===0&&i>0){ out=" "+out; } } return out; }
+function toast(msg){ var el=document.getElementById("toast"); el.textContent=msg; el.className="toast show"; setTimeout(function(){ el.className="toast"; },1900); }
+function bumpPeople(d){ var inp=document.getElementById("people"),v=parseInt(inp.value,10); if(isNaN(v)){v=0;} v=v+d; if(v<1){v=1;} if(v>500){v=500;} inp.value=v; }
+
+(function(){
+  function wire(){
+    var opts=document.querySelectorAll(".opt"),i;
+    for(i=0;i<opts.length;i++){
+      opts[i].addEventListener("click", function(){
+        var input=this.querySelector("input"),name=input.name,group=document.querySelectorAll('input[name="'+name+'"]'),g;
+        for(g=0;g<group.length;g++){ group[g].parentNode.className="opt"; }
+        this.className="opt sel"; input.checked=true;
+      });
+    }
+    function tog(id,box){ var c=document.getElementById(id); c.addEventListener("change",function(){ box.className="check"+(c.checked?" on":""); }); }
+    tog("misa", document.getElementById("misaCheck"));
+    tog("fish", document.getElementById("fishCheck"));
+    tog("sweetPastry", document.getElementById("ck_pastry"));
+    tog("briosky", document.getElementById("ck_brio"));
+    tog("bagety", document.getElementById("ck_bag"));
+    tog("burger", document.getElementById("ck_burg"));
+  }
+  if(document.readyState!=="loading"){ wire(); } else { document.addEventListener("DOMContentLoaded", wire); }
+})();
+
+function getRadio(name){ var els=document.querySelectorAll('input[name="'+name+'"]'),i; for(i=0;i<els.length;i++){ if(els[i].checked){ return els[i].value; } } return null; }
+
+function readSettings(){
+  var people=parseInt(document.getElementById("people").value,10); if(isNaN(people)||people<1){ people=1; }
+  var budget=parseInt(document.getElementById("budget").value,10); if(isNaN(budget)||budget<=0){ budget=0; }
+  return {
+    people:people, day:getRadio("day"), occ:getRadio("occ"), style:getRadio("style"), size:getRadio("size"), sweet:getRadio("sweet"),
+    misa:document.getElementById("misa").checked, noFish:document.getElementById("fish").checked,
+    sweetPastry:document.getElementById("sweetPastry").checked, briosky:document.getElementById("briosky").checked,
+    bagety:document.getElementById("bagety").checked, burger:document.getElementById("burger").checked,
+    budget:budget
+  };
+}
+
+function piecesPerPerson(occ){ if(occ==="coffee"){return 3.5;} if(occ==="meeting"){return 4.5;} if(occ==="feast"){return 8;} return 5.5; }
+function vegeRatio(style){ if(style==="meat"){return 0.15;} if(style==="moreveg"){return 0.6;} if(style==="vege"){return 1;} return 0.3; }
+function sizeSplit(size){ if(size==="chleb"){return 0.7;} if(size==="kan"){return 0.25;} return 0.5; }
+
+var FLAVOR_STEMS=["roastbeef","rosb","hermelin","sunk","salam","krab","losos","debrecin","herkules","gurman","cabaj","krkovic","caprese","cesnek","zerve","tun","kur","slanin","hovez","repa","vejc","syr","tvaroh","povidl","merunk","jablk","orech","cokolad","kakao","svestk","boruvk","malin","vanilk","pistac","kokos","citron","jahod","pernik","marmelad","tresn","visn","mak"];
+function deburr(s){ s=s.toLowerCase();
+  s=s.replace(/[áàä]/g,"a").replace(/[čć]/g,"c").replace(/ď/g,"d").replace(/[éě]/g,"e").replace(/í/g,"i").replace(/[ĺľ]/g,"l").replace(/ň/g,"n").replace(/[óö]/g,"o").replace(/ř/g,"r").replace(/[šś]/g,"s").replace(/ť/g,"t").replace(/[úůü]/g,"u").replace(/ý/g,"y").replace(/[žź]/g,"z");
+  return s; }
+function flavorKey(name){ var n=deburr(name),i; for(i=0;i<FLAVOR_STEMS.length;i++){ if(n.indexOf(FLAVOR_STEMS[i])>=0){ return FLAVOR_STEMS[i]; } } return "_"+n; }
+function pickDiverse(pool, kinds){
+  var sh=shuffle(pool), used={}, out=[], i;
+  for(i=0;i<sh.length&&out.length<kinds;i++){ var k=flavorKey(sh[i].name); if(!used[k]){ used[k]=1; out.push(sh[i]); } }
+  if(out.length<kinds){ var ids={},j; for(j=0;j<out.length;j++){ ids[out[j].id]=1; }
+    for(i=0;i<sh.length&&out.length<kinds;i++){ if(!ids[sh[i].id]){ ids[sh[i].id]=1; out.push(sh[i]); } } }
+  return out;
+}
+function pickSpread(pool, totalCount){
+  var out=[]; if(totalCount<=0||pool.length===0){ return out; }
+  var minQ = pool[0].min || 1;
+  var kinds;
+  if(totalCount < minQ){ kinds = 1; } else { kinds = Math.floor(totalCount / minQ); }
+  if(kinds < 1){ kinds = 1; }
+  if(kinds > 8){ kinds = 8; }
+  if(kinds > pool.length){ kinds = pool.length; }
+  var distinct=0,seenF={},z; for(z=0;z<pool.length;z++){ var fkk=flavorKey(pool[z].name); if(!seenF[fkk]){ seenF[fkk]=1; distinct++; } }
+  if(kinds > distinct){ kinds = distinct; }
+  var chosen=pickDiverse(pool,kinds);
+  var baseQty=Math.floor(totalCount/kinds); if(baseQty<minQ){ baseQty=minQ; }
+  var rest=totalCount-baseQty*kinds; if(rest<0){ rest=0; }
+  var i;
+  for(i=0;i<kinds;i++){ var q=baseQty+(i<rest?1:0); if(q<minQ){ q=minQ; } out.push({id:chosen[i].id,qty:q}); }
+  return out;
+}
+function poolFor(cat, needVege, noFish){
+  var out=[],i,p; for(i=0;i<CATALOG.length;i++){ p=CATALOG[i]; if(p.cat!==cat){continue;} if(p.cb){continue;} if(needVege&&!p.vege){continue;} if(noFish&&p.fish){continue;} out.push(p); } return out;
+}
+
+function buildCart(s){
+  var lines=[];
+  /* mísa */
+  var misaCount=0;
+  if(s.misa){
+    misaCount=Math.round(s.people/12); if(misaCount<1){misaCount=1;}
+    var mpool=poolFor("misa", s.style==="vege", s.noFish);
+    if(mpool.length){ var mp=shuffle(mpool)[0]; lines.push({id:mp.id,qty:misaCount}); }
+  }
+  /* slané */
+  var per=piecesPerPerson(s.occ), totalSavory=Math.round(s.people*per);
+  if(misaCount>0){ totalSavory=Math.round(totalSavory*0.8); }
+  if(totalSavory<s.people){ totalSavory=s.people; }
+  var chlebTotal=Math.round(totalSavory*sizeSplit(s.size)), kanTotal=totalSavory-chlebTotal, vr=vegeRatio(s.style);
+  var chVege=Math.round(chlebTotal*vr), chRest=chlebTotal-chVege;
+  appendPicks(lines, pickSpread(poolFor("chleb",true,s.noFish), chVege));
+  appendPicks(lines, pickSpread(poolFor("chleb", s.style==="vege", s.noFish), chRest));
+  var kaVege=Math.round(kanTotal*vr), kaRest=kanTotal-kaVege;
+  appendPicks(lines, pickSpread(poolFor("kan",true,s.noFish), kaVege));
+  appendPicks(lines, pickSpread(poolFor("kan", s.style==="vege", s.noFish), kaRest));
+  /* briošky */
+  if(s.briosky&&catAvailable("brioska",s.day)){ var brT=Math.round(s.people*0.4); if(brT<1){brT=1;} appendPicks(lines, pickSpread(poolFor("brioska", s.style==="vege", s.noFish), brT)); }
+  /* bagety */
+  if(s.bagety&&catAvailable("bageta",s.day)){ var bgT=Math.round(s.people/4); if(bgT<1){bgT=1;} appendPicks(lines, pickSpread(poolFor("bageta", s.style==="vege", s.noFish), bgT)); }
+  /* mini burgery */
+  if(s.burger&&catAvailable("burger",s.day)){ var buB=Math.round(s.people/12); if(buB<1){buB=1;} appendPicks(lines, pickSpread(poolFor("burger", s.style==="vege", false), buB)); }
+  /* dezerty */
+  if(s.sweet!=="none"&&catAvailable("dezert",s.day)){ var dezPer=(s.sweet==="full")?1:0.5; var dezTotal=Math.round(s.people*dezPer); if(dezTotal<1){dezTotal=1;} appendPicks(lines, pickSpread(poolFor("dezert",false,s.noFish), dezTotal)); }
+  /* koláčky */
+  if(s.sweetPastry&&catAvailable("kolacek",s.day)){ var spT=Math.round(s.people*0.66); if(spT<1){spT=1;} appendPicks(lines, pickSpread(poolFor("kolacek",false,false), spT)); }
+  /* rozpočet */
+  if(s.budget>0){ lines=trimToBudget(lines, s.budget); }
+  return mergeLines(lines);
+}
+
+function appendPicks(lines, picks){ var i; for(i=0;i<picks.length;i++){ lines.push(picks[i]); } }
+function mergeLines(lines){
+  var map={},order=[],i;
+  for(i=0;i<lines.length;i++){ var id=lines[i].id; if(!map[id]){ map[id]=0; order.push(id); } map[id]+=lines[i].qty; }
+  var out=[]; for(i=0;i<order.length;i++){ out.push({id:order[i],qty:map[order[i]]}); } return out;
+}
+function linesTotal(lines){ var t=0,i; for(i=0;i<lines.length;i++){ t+=BYID[lines[i].id].price*lines[i].qty; } return t; }
+
+function trimToBudget(lines, budget){
+  var i;
+  /* nejdřív zredukuj počet mís, pokud samy přesahují rozpočet */
+  var misaCost=0;
+  for(i=0;i<lines.length;i++){ if(BYID[lines[i].id].cat==="misa"){ misaCost+=BYID[lines[i].id].price*lines[i].qty; } }
+  while(misaCost>budget){
+    var trimmed=false;
+    for(i=0;i<lines.length;i++){ if(BYID[lines[i].id].cat==="misa"&&lines[i].qty>0){ lines[i].qty-=1; misaCost-=BYID[lines[i].id].price; trimmed=true; break; } }
+    if(!trimmed){ break; }
+  }
+  /* zbytek ořezáváme tak, aby žádná položka neklesla pod svůj minimální odběr:
+     nejdřív ubíráme z položek nad minimem (od nejdražších), pak rušíme celé druhy */
+  var guard=0;
+  while(guard++ < 5000){
+    var total=linesTotal(lines);
+    if(total<=budget){ break; }
+    var need=total-budget;
+    var idx=-1, bestPrice=-1, p;
+    for(i=0;i<lines.length;i++){ p=BYID[lines[i].id]; if(p.cat==="misa"){ continue; } if(lines[i].qty > (p.min||1)){ if(p.price>bestPrice){ bestPrice=p.price; idx=i; } } }
+    if(idx>=0){
+      var pp=BYID[lines[idx].id]; var canCut=lines[idx].qty-(pp.min||1);
+      var cut=Math.ceil(need/pp.price); if(cut<1){ cut=1; } if(cut>canCut){ cut=canCut; }
+      lines[idx].qty-=cut;
+    } else {
+      /* všechny nemísové položky jsou na minimu → zruš celý nejdražší druh */
+      var ridx=-1, rVal=-1, val;
+      for(i=0;i<lines.length;i++){ p=BYID[lines[i].id]; if(p.cat==="misa"){ continue; } val=p.price*lines[i].qty; if(val>rVal){ rVal=val; ridx=i; } }
+      if(ridx<0){ break; }
+      lines.splice(ridx,1);
+    }
+  }
+  var out=[]; for(i=0;i<lines.length;i++){ if(lines[i].qty>0){ out.push(lines[i]); } } return out;
+}
+
+function generate(){ lastSettings=readSettings(); cart=buildCart(lastSettings); wasFree=false; render(); confetti(); toast("Pohoštění sestaveno"); }
+function reshuffle(){ if(!lastSettings){ return; } seed=Math.floor(Math.random()*1000000)+1; cart=buildCart(lastSettings); render(); toast("Nový výběr namíchán"); }
+
+function catLabel(cat){
+  var m={chleb:"Chlebíčky",kan:"Kanapky a jednohubky",misa:"Obložené mísy",brioska:"Briošky",
+    bageta:"Bagety",toast:"Toasty",tortilla:"Tortilly",houska:"Svačinové housky",burger:"Mini burgery",
+    hotove:"Hotová jídla",smazene:"Smažené",aspik:"Lahůdkářská klasika",salat:"Saláty (vážené)",
+    pomazanka:"Pomazánky (vážené)",balene:"Balené saláty a pomazánky",dezert:"Dezerty",
+    kolacek:"Koláčky",kolac:"Krájené koláče",kolacekvaha:"Svatební koláčky (na váhu)",buchta:"Buchty",zavin:"Záviny",pecivo:"Pečivo",dort:"Chlebíčkový dort"};
+  return m[cat]||cat;
+}
+function unitWord(cat){ if(cat==="misa"){return "mísa";} if(cat==="burger"){return "box";} return "ks"; }
+function groupUnit(cat){ if(cat==="misa"){return "ks mísa";} if(cat==="burger"){return "boxů";} if(cat==="salat"||cat==="pomazanka"||cat==="kolacekvaha"){return "kg";} return "ks"; }
+
+function catEmoji(cat){
+  var m={chleb:"\uD83E\uDD6A",kan:"\uD83E\uDED3",misa:"\uD83C\uDF7D\uFE0F",dort:"\uD83C\uDF82",brioska:"\uD83E\uDD50",
+    bageta:"\uD83E\uDD56",toast:"\uD83C\uDF5E",tortilla:"\uD83C\uDF2F",houska:"\uD83E\uDD6F",burger:"\uD83C\uDF54",
+    hotove:"\uD83C\uDF71",smazene:"\uD83C\uDF57",aspik:"\uD83E\uDD5A",salat:"\uD83E\uDD57",pomazanka:"\uD83E\uDD6B",
+    balene:"\uD83E\uDD57",dezert:"\uD83C\uDF6E",kolacek:"\uD83E\uDDC1",kolac:"\uD83C\uDF70",kolacekvaha:"\uD83E\uDDC1",
+    buchta:"\uD83C\uDF69",zavin:"\uD83E\uDD50",pecivo:"\uD83E\uDD56"};
+  return m[cat]||"\uD83C\uDF7D\uFE0F";
+}
+function animateCounts(box){
+  var els=box.querySelectorAll(".cnt"),i;
+  for(i=0;i<els.length;i++){ (function(el){
+    var to=parseInt(el.getAttribute("data-to"),10)||0; var doFmt=el.getAttribute("data-fmt")==="1";
+    var dur=750, start=null;
+    function step(t){ if(start===null){ start=t; } var p=(t-start)/dur; if(p>1){ p=1; }
+      var val=Math.round(to*(1-(1-p)*(1-p))); el.textContent=doFmt?fmt(val):String(val); if(p<1){ requestAnimationFrame(step); } }
+    requestAnimationFrame(step);
+  })(els[i]); }
+}
+function fillShip(box){
+  var el=box.querySelector(".ship-fill"); if(!el){ return; }
+  setTimeout(function(){ el.style.width=el.getAttribute("data-pct")+"%"; },60);
+}
+function confetti(){
+  if(typeof document==="undefined"){ return; }
+  var cont=document.createElement("div"); cont.className="confetti-layer"; document.body.appendChild(cont);
+  var colors=["#E85520","#6B7A50","#dfbd95","#3B1A0D","#f2843f"]; var n=90, i;
+  for(i=0;i<n;i++){ (function(){
+    var d=document.createElement("i"); var size=6+Math.random()*8;
+    d.style.cssText="position:absolute;top:-12px;left:"+(Math.random()*100)+"vw;width:"+size+"px;height:"+(size*0.6)+"px;background:"+colors[Math.floor(Math.random()*colors.length)]+";border-radius:2px;";
+    cont.appendChild(d);
+    var dur=1300+Math.random()*1000, drift=(Math.random()*2-1)*200, start=null;
+    function step(t){ if(start===null){ start=t; } var p=(t-start)/dur; if(p>=1){ if(d.parentNode){ d.parentNode.removeChild(d); } return; }
+      d.style.top=(-12+p*112)+"vh"; d.style.transform="translateX("+(drift*p)+"px) rotate("+(p*720)+"deg)"; d.style.opacity=String(1-p*p); requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  })(); }
+  setTimeout(function(){ if(cont.parentNode){ cont.parentNode.removeChild(cont); } },2700);
+}
+function catAvailable(cat, day){
+  if(day==="sun"){ return (cat==="chleb"||cat==="kan"||cat==="misa"); }
+  if(day==="sat"){ return !(cat==="buchta"||cat==="kolac"); }
+  return true;
+}
+function dayName(day){ if(day==="mon"){return "pondělí";} if(day==="sat"){return "sobota";} if(day==="sun"){return "neděle";} return "Út–Pá"; }
+function deadlineInfo(day){
+  if(day==="mon"){ return {ostatni:"v neděli do 11:00", kolace:"v sobotu do 10:00"}; }
+  if(day==="sat"){ return {ostatni:"v pátek do 14:00", kolace:"ve čtvrtek do 14:00"}; }
+  if(day==="sun"){ return {ostatni:"v pátek do 14:00", kolace:"v pátek do 14:00"}; }
+  return {ostatni:"den předem do 14:00", kolace:"den předem do 10:00"};
+}
+function availabilityNote(day){
+  if(day==="sun"){ return " V neděli jsou dostupné jen chlebíčky, klasické i premium kanapky a obložené mísy."; }
+  if(day==="sat"){ return " V sobotu nelze objednat buchty a krájené koláče."; }
+  return "";
+}
+function render(){
+  var box=document.getElementById("result");
+  if(cart.length===0){
+    box.innerHTML='<div class="empty"><div class="ico">🍽️</div><h2 style="margin-bottom:6px;">Košík je prázdný</h2><p>Upravte nastavení a sestavte pohoštění znovu, nebo přidejte produkt ručně.</p></div>';
+    return;
+  }
+  var s=lastSettings||readSettings();
+  var savoryPieces=0,sweetPieces=0,misaPieces=0,i,p;
+  for(i=0;i<cart.length;i++){
+    p=BYID[cart[i].id];
+    if(p.cat==="chleb"||p.cat==="kan"){ savoryPieces+=cart[i].qty; }
+    else if(p.cat==="dezert"||p.cat==="kolacek"||p.cat==="kolac"){ sweetPieces+=cart[i].qty; }
+    else if(p.cat==="misa"){ misaPieces+=cart[i].qty; }
+  }
+  var total=linesTotal(cart), perPerson=s.people>0?(total/s.people):0, savPer=s.people>0?(savoryPieces/s.people):0;
+
+  var html="";
+  html+='<h2>Návrh pohoštění</h2>';
+  html+='<p class="sub">Pro '+s.people+' hostů · '+occName(s.occ)+'. Vše níže můžete doladit.</p>';
+  html+='<div class="summary">';
+  html+=stat("Hostů", '<span class="cnt" data-to="'+s.people+'">0</span>', "");
+  html+=stat("Slaných kousků", '<span class="cnt" data-to="'+savoryPieces+'">0</span>', "≈ "+(Math.round(savPer*10)/10)+" / os");
+  html+=stat("Sladkých kousků", '<span class="cnt" data-to="'+sweetPieces+'">0</span>', "");
+  html+='<div class="stat hi"><div class="k">Cena celkem</div><div class="v"><span class="cnt" data-to="'+total+'" data-fmt="1">0</span> <span>Kč</span></div></div>';
+  html+='</div>';
+  var cols2=(misaPieces>0)?"1fr 1fr 1fr":"1fr 1fr";
+  html+='<div class="summary" style="grid-template-columns:'+cols2+';margin-top:-10px;">';
+  html+=stat("Cena na osobu", fmt(perPerson)+" Kč", "");
+  if(misaPieces>0){ html+=stat("Obložené mísy", misaPieces+" "+(misaPieces===1?"mísa":(misaPieces<5?"mísy":"mís")), ""); }
+  if(s.budget>0){ var diff=s.budget-total; html+=stat("Rozpočet "+fmt(s.budget)+" Kč", diff>=0?("zbývá "+fmt(diff)+" Kč"):("nad limit o "+fmt(-diff)+" Kč"), ""); }
+  else { html+=stat("Rozpočet","neomezený",""); }
+  html+='</div>';
+  var hasKolace=false,hk; for(hk=0;hk<cart.length;hk++){ var hkc=BYID[cart[hk].id].cat; if(hkc==="kolacek"||hkc==="kolac"||hkc==="kolacekvaha"){ hasKolace=true; break; } }
+  var dl=deadlineInfo(s.day);
+  html+='<div class="deadline"><strong>Vyzvednutí: '+dayName(s.day)+'</strong> · objednejte nejpozději '+dl.ostatni+' <span style="color:rgba(59,26,13,.55)">(ostatní sortiment)</span>';
+  if(hasKolace){ html+='<br><span class="ko">Koláče a koláčky: objednejte už '+dl.kolace+'</span>'; }
+  var an=availabilityNote(s.day); if(an){ html+='<br>'+an; }
+  html+='</div>';
+  var pct=total>=FREE_FROM?100:Math.round(total/FREE_FROM*100);
+  html+='<div class="ship'+(total>=FREE_FROM?' done':'')+'">';
+  html+='<div class="ship-top"><span class="ship-ico">🚚</span><span class="ship-msg">'+(total>=FREE_FROM?'Doprava po Praze <strong>zdarma</strong> 🎉':'Do dopravy zdarma zbývá <strong>'+fmt(FREE_FROM-total)+' Kč</strong>')+'</span><span class="ship-cap">'+fmt(total>=FREE_FROM?FREE_FROM:total)+' / 3 000 Kč</span></div>';
+  html+='<div class="ship-bar"><div class="ship-fill" data-pct="'+pct+'"></div></div>';
+  if(total<FREE_FROM){ html+='<div class="ship-hint">jinak doprava po Praze 190 Kč</div>'; }
+  html+='</div>';
+  if(s.day==="sun"&&(s.sweet!=="none"||s.sweetPastry||s.briosky||s.bagety||s.burger)){ html+='<div class="note">V neděli jsme vynechali sladké a doplňky – nejsou v tento den dostupné.</div>'; }
+  if(s.day==="sat"&&false){ }
+  if(s.budget>0&&total>s.budget){ html+='<div class="note">Nepodařilo se srovnat přesně do rozpočtu (drží minimum 1 ks u položky). Uberte ručně nebo zvyšte strop.</div>'; }
+  else if(s.budget>0){ html+='<div class="note">Návrh byl upraven do rozpočtu '+fmt(s.budget)+' Kč.</div>'; }
+
+  var cats=["misa","dort","chleb","kan","brioska","bageta","toast","tortilla","houska","burger","hotove","smazene","aspik","salat","pomazanka","balene","dezert","kolacek","kolac","kolacekvaha","buchta","zavin","pecivo"],c,gi=0;
+  for(c=0;c<cats.length;c++){
+    var rows="",groupCount=0;
+    for(i=0;i<cart.length;i++){ p=BYID[cart[i].id]; if(p.cat!==cats[c]){continue;} groupCount+=cart[i].qty; rows+=renderLine(cart[i],p); }
+    if(rows===""){ continue; }
+    html+='<div class="group-title reveal" style="animation-delay:'+(gi*55)+'ms">'+catEmoji(cats[c])+' '+catLabel(cats[c])+' <span class="pill">'+groupCount+' '+groupUnit(cats[c])+'</span></div>';
+    html+='<table class="reveal" style="animation-delay:'+(gi*55+25)+'ms"><tbody>'+rows+'</tbody></table>'; gi++;
+  }
+  html+='<div class="totalbar"><span class="lbl">Celkem k objednání</span><span class="big"><span class="cnt" data-to="'+total+'" data-fmt="1">0</span> Kč</span></div>';
+  html+='<div class="adder"><select id="addSel">'+buildAddOptions()+'</select><button type="button" onclick="addProduct()">+ Přidat položku</button></div>';
+  if(lastSettings&&lastSettings.occ==="feast"){ var hasDort=false,di; for(di=0;di<cart.length;di++){ if(BYID[cart[di].id].cat==="dort"){ hasDort=true; break; } } if(!hasDort&&BYID["dort01"]&&catAvailable("dort",lastSettings.day)){ html+='<div class="suggest"><span class="sg-emo">🎂</span><div class="sg-tx"><strong>Slavíte? Přidejte slaný chlebíčkový dort.</strong><span>Slaný dort z pravých chlebíčků — ne sladký, slavnostní kus za 459 Kč.</span></div><button type="button" onclick="addById(\'dort01\')">Přidat slaný dort</button></div>'; } }
+  html+='<div class="actions">';
+  html+='<button class="btn-cart" type="button" onclick="addAllToCart()">🛒 Přidat vše do košíku</button>';
+  html+='<button class="btn-primary" type="button" onclick="copyOrder()">Zkopírovat objednávku</button>';
+  html+='<button class="btn-shuffle" type="button" onclick="reshuffle()">Zamíchat výběr</button>';
+  html+='<button class="btn-ghost" type="button" onclick="printOrder()">Tisk / PDF (1 strana)</button>';
+  html+='</div>';
+  box.innerHTML=html;
+  animateCounts(box); fillShip(box);
+  if(total>=FREE_FROM && !wasFree){ confetti(); }
+  wasFree=(total>=FREE_FROM);
+}
+
+function occName(occ){ if(occ==="coffee"){return "lehké pohoštění";} if(occ==="meeting"){return "firemní meeting";} if(occ==="feast"){return "oslava";} return "večírek / raut"; }
+function stat(k,v,sub){ return '<div class="stat"><div class="k">'+k+'</div><div class="v">'+v+(sub?' <span>'+sub+'</span>':'')+'</div></div>'; }
+
+function renderLine(line,p){
+  var sum=p.price*line.qty, tags="";
+  if(p.vege){ tags+='<span class="tag vege">vege</span>'; }
+  if(p.fish){ tags+='<span class="tag fish">ryba</span>'; }
+  if(p.cb){ tags+='<span class="tag cb">jen ČB</span>'; }
+  if(p.rec){ tags+='<span class="tag rec">doporučujeme</span>'; }
+  if(lastSettings&&!catAvailable(p.cat,lastSettings.day)){ tags+='<span class="tag warn">není v '+dayName(lastSettings.day)+'</span>'; }
+  var url=PRODUCT+p.slug+"/";
+  var cartUrl=p.addId?(SHOP+p.addId+"&quantity="+line.qty):url;
+  var cartTxt=p.addId?"🛒 do košíku":"🛒 na stránce produktu";
+  var minTxt=(p.min&&p.min>1)?(' · min '+p.min+'/druh'):'';
+  var h='<tr class="line">';
+  var thumb='<span class="thumb"><span class="emo">'+catEmoji(p.cat)+'</span>'+(p.img?('<img loading="lazy" referrerpolicy="no-referrer" src="'+IMG+p.img+'" alt="" onerror="this.remove()">'):'')+'</span>';
+  h+='<td><div class="linehead">'+thumb+'<div class="name"><a href="'+url+'" target="_blank" rel="noopener">'+p.name+'</a>'+tags+'</div></div>';
+  h+='<div class="unit">'+p.price+' Kč / '+(p.unit||'ks')+minTxt+' · <a class="cartlink" href="'+cartUrl+'" target="llkosik" rel="noopener">'+cartTxt+'</a></div></td>';
+  h+='<td><div class="qty"><button type="button" onclick="adjust(\''+p.id+'\',-1)">−</button><span class="n">'+line.qty+'</span><button type="button" onclick="adjust(\''+p.id+'\',1)">+</button></div></td>';
+  h+='<td class="sum">'+fmt(sum)+' Kč</td>';
+  h+='<td class="acts"><button class="swap" type="button" title="Vyměnit za jinou příchuť" onclick="swapLine(\''+p.id+'\')">🔄</button><button class="del" type="button" title="Odebrat" onclick="removeLine(\''+p.id+'\')">✕</button></td>';
+  h+='</tr>';
+  return h;
+}
+
+function adjust(id,d){ var i; for(i=0;i<cart.length;i++){ if(cart[i].id===id){ var mn=BYID[id].min||1; var nq=cart[i].qty+d; if(d<0&&nq<mn){ nq=0; } if(nq<=0){ cart.splice(i,1); } else { cart[i].qty=nq; } break; } } render(); }
+function removeLine(id){ var i; for(i=0;i<cart.length;i++){ if(cart[i].id===id){ cart.splice(i,1); break; } } render(); }
+function addById(id){ if(!id||!BYID[id]){ return; } var i,found=false; for(i=0;i<cart.length;i++){ if(cart[i].id===id){ cart[i].qty+=1; found=true; break; } } if(!found){ cart.push({id:id,qty:(BYID[id].min||1)}); } render(); toast("Přidáno: "+BYID[id].name); }
+function addProduct(){ var sel=document.getElementById("addSel"); addById(sel.value); }
+function swapLine(id){
+  var line=null,i; for(i=0;i<cart.length;i++){ if(cart[i].id===id){ line=cart[i]; break; } }
+  if(!line){ return; }
+  var p=BYID[id]; var inCart={},j; for(j=0;j<cart.length;j++){ inCart[cart[j].id]=1; }
+  var usedFlav={}; for(j=0;j<cart.length;j++){ if(BYID[cart[j].id].cat===p.cat){ usedFlav[flavorKey(BYID[cart[j].id].name)]=1; } }
+  var noFish=lastSettings?lastSettings.noFish:false;
+  var pool=[],k,q; for(k=0;k<CATALOG.length;k++){ q=CATALOG[k]; if(q.cat!==p.cat){continue;} if(q.cb){continue;} if(q.id===id){continue;} if(inCart[q.id]){continue;} if(noFish&&q.fish){continue;} pool.push(q); }
+  if(!pool.length){ toast("Jiná příchuť v této kategorii tu není"); return; }
+  var diff=[],same=[]; for(k=0;k<pool.length;k++){ if(usedFlav[flavorKey(pool[k].name)]){ same.push(pool[k]); } else { diff.push(pool[k]); } }
+  var src=diff.length?diff:pool; var pick=shuffle(src)[0];
+  var nq=line.qty, mn=pick.min||1; if(nq<mn){ nq=mn; }
+  line.id=pick.id; line.qty=nq; render(); toast("Vyměněno za: "+pick.name);
+}
+function printOrder(){
+  var s=lastSettings||readSettings();
+  var cats=["misa","dort","chleb","kan","brioska","bageta","toast","tortilla","houska","burger","hotove","smazene","aspik","salat","pomazanka","balene","dezert","kolacek","kolac","kolacekvaha","buchta","zavin","pecivo"];
+  var rows="",c,i,p;
+  for(c=0;c<cats.length;c++){ var head=false; for(i=0;i<cart.length;i++){ p=BYID[cart[i].id]; if(p.cat!==cats[c]){continue;} if(!head){ rows+='<tr class="cat"><td colspan="4">'+catLabel(cats[c])+'</td></tr>'; head=true; } rows+='<tr><td class="q">'+cart[i].qty+'\u00d7</td><td>'+p.name+'</td><td class="r">'+p.price+' Kč</td><td class="r">'+fmt(p.price*cart[i].qty)+' Kč</td></tr>'; } }
+  if(!rows){ toast("Nejprve sestav pohoštění"); return; }
+  var total=linesTotal(cart);
+  var hasKolace=false,hk; for(hk=0;hk<cart.length;hk++){ var hc=BYID[cart[hk].id].cat; if(hc==="kolacek"||hc==="kolac"||hc==="kolacekvaha"){ hasKolace=true; break; } }
+  var dl=deadlineInfo(s.day);
+  var dlTxt="Objednací uzávěrka: "+dl.ostatni+" (ostatní sortiment)"+(hasKolace?("; koláče a koláčky "+dl.kolace):"");
+  var ship=total>=FREE_FROM?"Doprava po Praze zdarma (objednávka nad 3 000 Kč).":("Do dopravy zdarma po Praze zbývá "+fmt(FREE_FROM-total)+" Kč (jinak doprava 190 Kč).");
+  var css="*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#222;margin:0;font-size:11px}h1{font-size:16px;margin:0 0 2px;color:#3B1A0D}.sub{color:#666;margin-bottom:9px}table{width:100%;border-collapse:collapse}td{padding:2px 5px;border-bottom:1px solid #eee;vertical-align:top}tr.cat td{background:#f3ede1;font-weight:bold;border-bottom:1px solid #ddd;padding-top:5px;color:#6b4a2a}.q{white-space:nowrap;width:36px}.r{text-align:right;white-space:nowrap}.tot{display:flex;justify-content:space-between;font-size:15px;font-weight:bold;margin-top:9px;border-top:2px solid #333;padding-top:6px}.meta{margin-top:9px;font-size:10.5px;color:#444;line-height:1.55}.meta b{color:#222}@page{size:A4;margin:14mm}";
+  var doc="<!doctype html><html lang=\"cs\"><head><meta charset=\"utf-8\"><title>Objednávka pohoštění</title><style>"+css+"</style></head><body>";
+  doc+="<h1>Objednávka pohoštění — Libeřské lahůdky</h1>";
+  doc+="<div class=\"sub\">"+s.people+" hostů · "+occName(s.occ)+" · vyzvednutí: "+dayName(s.day)+"</div>";
+  doc+="<table>"+rows+"</table>";
+  doc+="<div class=\"tot\"><span>Celkem k objednání</span><span>"+fmt(total)+" Kč</span></div>";
+  doc+="<div class=\"meta\"><b>"+dlTxt+"</b><br>"+ship+"<br>Objednávky: objednavky@liberskelahudky.cz · +420 734 449 901<br><span style=\"color:#999\">Ceny vč. DPH, orientační. Sestaveno Pochoutkovým manuálem.</span></div>";
+  doc+="</body></html>";
+  var w=window.open("","llprint","width=820,height=900");
+  if(!w){ toast("Povolte prosím vyskakovací okna"); return; }
+  w.document.open(); w.document.write(doc); w.document.close(); w.focus();
+  setTimeout(function(){ try{ w.print(); }catch(e){} },350);
+}
+function buildAddOptions(){
+  var cats=["chleb","kan","misa","dort","brioska","bageta","toast","tortilla","houska","burger","hotove","smazene","aspik","salat","pomazanka","balene","dezert","kolacek","kolac","kolacekvaha","buchta","zavin","pecivo"];
+  var html='<option value="">+ vyber produkt z katalogu…</option>',c,i,p;
+  for(c=0;c<cats.length;c++){
+    html+='<optgroup label="'+catLabel(cats[c])+'">';
+    for(i=0;i<CATALOG.length;i++){ p=CATALOG[i]; if(p.cat!==cats[c]){continue;} html+='<option value="'+p.id+'">'+p.name+(p.cb?' (jen ČB)':'')+(p.rec?' ⭐ doporučujeme':'')+' — '+p.price+' Kč</option>'; }
+    html+='</optgroup>';
+  }
+  return html;
+}
+
+function addAllToCart(){
+  var items=[],missing=0,i,p;
+  for(i=0;i<cart.length;i++){ p=BYID[cart[i].id]; if(p.addId){ items.push(SHOP+p.addId+"&quantity="+cart[i].qty); } else { missing++; } }
+  if(items.length===0){ toast("Žádná položka nemá napojení na košík"); return; }
+  var win=window.open(items[0],"llkosik");
+  if(!win){ toast("Povolte vyskakovací okna pro tuto stránku"); return; }
+  var total=items.length, secs=Math.ceil((total)*1.7);
+  var ov=document.createElement("div"); ov.className="cart-ov";
+  ov.innerHTML='<div class="cart-card"><div class="cart-spin"></div><div class="cart-h">Přidávám do košíku…</div><div class="cart-sub">Nechte to prosím dojet a zatím na nic neklikejte.</div><div class="cart-bar"><div class="cart-fill"></div></div><div class="cart-n"><b class="cn">1</b> / '+total+' položek · ~'+secs+' s</div><div class="cart-note">Otevřelo se nové okno s košíkem na lahudky.cz. Naskládáme tam vše postupně – až to dojede, košík se sám zobrazí.</div></div>';
+  document.body.appendChild(ov);
+  function upd(n){ var c=ov.querySelector(".cn"); if(c){ c.textContent=String(n); } var f=ov.querySelector(".cart-fill"); if(f){ f.style.width=Math.round(n/total*100)+"%"; } }
+  upd(1);
+  var idx=1;
+  function finish(){
+    try{ win.location.href=CART; win.focus(); }catch(e){}
+    var card=ov.querySelector(".cart-card");
+    if(card){ card.innerHTML='<div class="cart-done">✓</div><div class="cart-h">Hotovo!</div><div class="cart-sub">Košík je otevřený v novém okně'+(missing>0?(" · "+missing+" položek bez napojení přidejte ručně"):"")+'.</div><button type="button" class="cart-close">Zavřít</button>';
+      var b=card.querySelector(".cart-close"); if(b){ b.onclick=function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; } }
+    setTimeout(function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } },7000);
+  }
+  function stepFn(){
+    if(idx<items.length){ try{ win.location.href=items[idx]; }catch(e){} idx++; upd(idx); setTimeout(stepFn,1700); }
+    else { setTimeout(finish,1700); }
+  }
+  setTimeout(stepFn,1700);
+}
+
+function orderText(){
+  var s=lastSettings||readSettings(),lines=[];
+  lines.push("OBJEDNÁVKA POHOŠTĚNÍ – Libeřské lahůdky");
+  lines.push("Počet hostů: "+s.people+" · "+occName(s.occ));
+  lines.push("");
+  var cats=["misa","dort","chleb","kan","brioska","bageta","toast","tortilla","houska","burger","hotove","smazene","aspik","salat","pomazanka","balene","dezert","kolacek","kolac","kolacekvaha","buchta","zavin","pecivo"],c,i,p;
+  for(c=0;c<cats.length;c++){
+    var head=false;
+    for(i=0;i<cart.length;i++){ p=BYID[cart[i].id]; if(p.cat!==cats[c]){continue;} if(!head){ lines.push("— "+catLabel(cats[c])+" —"); head=true; } lines.push("  "+cart[i].qty+"x  "+p.name+"  ("+p.price+" Kč = "+fmt(p.price*cart[i].qty)+" Kč)"); }
+    if(head){ lines.push(""); }
+  }
+  lines.push("CELKEM: "+fmt(linesTotal(cart))+" Kč vč. DPH (orientačně dle lahudky.cz)");
+  return lines.join("\n");
+}
+function copyOrder(){
+  var txt=orderText();
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ toast("Objednávka zkopírována"); },function(){ fallbackCopy(txt); }); }
+  else { fallbackCopy(txt); }
+}
+function fallbackCopy(txt){
+  var ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); toast("Objednávka zkopírována"); }catch(e){ toast("Zkopírujte ručně"); }
+  document.body.removeChild(ta);
+}
+function openMail(){
+  var s=lastSettings||readSettings();
+  var subject="Objednávka pohoštění – "+s.people+" osob";
+  var body=orderText()+"\n\nJméno:\nTelefon:\nDatum a místo dovozu:\n";
+  window.location.href="mailto:objednavky@liberskelahudky.cz?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+  return false;
+}
+</script>
+</body>
+</html>
