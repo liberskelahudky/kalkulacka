@@ -1000,12 +1000,18 @@ function openMail(){
 
 /* --- hlásič výšky pro embedování v iframu (auto-výška na webu) --- */
 (function(){
+  var last=0;
+  function contentHeight(){
+    var w=document.querySelector(".wrap");
+    if(w&&w.getBoundingClientRect){ return Math.ceil(w.getBoundingClientRect().height); }
+    return document.body?document.body.scrollHeight:0;
+  }
   function reportHeight(){
-    var h=Math.max(document.body?document.body.scrollHeight:0, document.documentElement?document.documentElement.scrollHeight:0);
-    if(h>0){ try{ parent.postMessage({pmId:"pochoutkovy-manual",pmHeight:h},"*"); }catch(e){} }
+    var h=contentHeight();
+    if(h>0 && Math.abs(h-last)>2){ last=h; try{ parent.postMessage({pmId:"pochoutkovy-manual",pmHeight:h},"*"); }catch(e){} }
   }
   if(window.addEventListener){ window.addEventListener("load",reportHeight); window.addEventListener("resize",reportHeight); }
-  setInterval(reportHeight,600);
+  setInterval(reportHeight,500);
 })();
 </script>
 </body>
