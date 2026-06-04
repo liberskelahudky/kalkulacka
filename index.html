@@ -949,16 +949,18 @@ function addAllToCart(){
   if(items.length===0){ toast("Žádná položka nemá napojení na košík"); return; }
   var win=window.open("about:blank","llkosik");
   if(!win){ toast("Povolte prosím vyskakovací okna pro tuto stránku"); return; }
-  /* uvítací hláška ve vedlejším okně, ať lidem dojde, že se skládá košík */
   try{
     win.document.open();
     win.document.write('<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Skládám košík…</title></head><body style="margin:0;font-family:Arial,Helvetica,sans-serif;background:#F0E8D6;color:#3B1A0D;display:flex;align-items:center;justify-content:center;min-height:100vh"><div style="text-align:center;max-width:420px;padding:28px"><div style="font-size:52px;margin-bottom:6px">🛒</div><h2 style="font-family:Georgia,serif;font-size:24px;margin:0 0 8px">Skládám vaše pohoštění do košíku…</h2><p style="font-size:15px;line-height:1.6;margin:0">Prosím <b>nezavírejte</b> toto okno. Košík se za chvíli začne plnit a až bude hotovo, sám se zobrazí.</p><div style="margin-top:18px;width:42px;height:42px;border:5px solid rgba(232,85,32,.25);border-top-color:#E85520;border-radius:50%;display:inline-block;animation:s 1s linear infinite"></div></div><style>@keyframes s{to{transform:rotate(360deg)}}</style></body></html>');
     win.document.close();
   }catch(e){}
+  /* vrátit fokus zpět na Rautomat, ať uživatele nepřepne do okna na pozadí */
+  try{ win.blur(); }catch(e){}
+  try{ window.focus(); }catch(e){}
   var total=items.length;
   var btn=document.querySelector(".btn-cart-big"); if(btn){ btn.disabled=true; }
   var ov=document.createElement("div"); ov.className="cart-inline";
-  ov.innerHTML='<div class="ci-row"><span class="cart-spin small"></span><div><div class="cart-h" style="font-size:17px;">Skládám košík ve vedlejším okně…</div><div class="cart-sub" style="margin:0;"><b>Nezavírejte</b> nové okno – plní se v něm košík. Až to dojede, košík se sám zobrazí.</div></div></div><div class="cart-bar"><div class="cart-fill"></div></div><div class="cart-n"><b class="cn">0</b> / '+total+' položek</div>';
+  ov.innerHTML='<div class="ci-row"><span class="cart-spin small"></span><div><div class="cart-h" style="font-size:17px;">Skládám košík v okně na pozadí…</div><div class="cart-sub" style="margin:0;">Můžeš zůstat tady a sledovat průběh. <b>Nezavírej</b> nové okno – plní se v něm košík.</div></div></div><div class="cart-bar"><div class="cart-fill"></div></div><div class="cart-n"><b class="cn">0</b> / '+total+' položek</div>';
   if(btn&&btn.parentNode){ btn.parentNode.insertBefore(ov, btn.nextSibling); } else { document.body.appendChild(ov); }
   try{ ov.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){}
   function upd(n){ var c=ov.querySelector(".cn"); if(c){ c.textContent=String(n); } var f=ov.querySelector(".cart-fill"); if(f){ f.style.width=Math.round(n/total*100)+"%"; } }
@@ -972,11 +974,11 @@ function addAllToCart(){
     setTimeout(advance, FALLBACK);
   }
   function finish(){
-    try{ win.location.href=CART; win.focus(); }catch(e){}
+    try{ win.location.href=CART; }catch(e){}
     if(btn){ btn.disabled=false; }
-    ov.innerHTML='<div style="text-align:center;"><div class="cart-done">✓</div><div class="cart-h">Hotovo – košík je naplněný!</div><div class="cart-sub">Najdete ho v novém okně'+(missing>0?(" · "+missing+" položek bez napojení přidejte ručně"):"")+'. Pro jistotu zkontrolujte počet položek.</div><button type="button" class="btn-mini cart-close" style="margin-top:10px;max-width:140px;">Zavřít</button></div>';
-    var b=ov.querySelector(".cart-close"); if(b){ b.onclick=function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; }
-    setTimeout(function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } },9000);
+    ov.innerHTML='<div style="text-align:center;"><div class="cart-done">✓</div><div class="cart-h">Hotovo – košík je naplněný!</div><div class="cart-sub">Čeká na tebe v druhém okně'+(missing>0?(" · "+missing+" položek bez napojení přidejte ručně"):"")+'. Pro jistotu zkontroluj počet položek.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:12px;"><button type="button" class="btn-mini cart-open" style="max-width:170px;background:var(--orange);color:#fff;border-color:var(--orange);">Otevřít košík →</button><button type="button" class="btn-mini cart-close" style="max-width:110px;">Zavřít</button></div></div>';
+    var bo=ov.querySelector(".cart-open"); if(bo){ bo.onclick=function(){ try{ win.focus(); }catch(e){} try{ if(win.closed){ window.open(CART,"llkosik"); } }catch(e){} }; }
+    var bc=ov.querySelector(".cart-close"); if(bc){ bc.onclick=function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; }
   }
   setTimeout(go,1100);
 }
