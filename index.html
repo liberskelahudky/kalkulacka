@@ -14,7 +14,7 @@
   --shadow:0 18px 40px -22px rgba(59,26,13,.45);
 }
 *{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
+html,body{margin:0;padding:0;overflow-x:hidden;}
 body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;color:var(--brown);
   background:transparent;
   line-height:1.5;-webkit-font-smoothing:antialiased;}
@@ -22,12 +22,12 @@ body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;co
 .head{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
 .logo{height:46px;width:auto;display:block;}
 .logo-fallback{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--orange);}
-.head h1{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(40px,6vw,64px);line-height:1.02;margin:8px 0 2px;letter-spacing:-1px;text-align:center;color:var(--brown);}
-.tagline{font-family:'Sacramento',cursive;font-weight:400;font-size:clamp(34px,5vw,56px);color:var(--brown);text-align:center;line-height:1.05;margin:2px 0 22px;}
+h1.brand{font-family:'Fraunces',serif !important;font-weight:700 !important;font-size:clamp(40px,6vw,64px) !important;line-height:1.02;margin:8px auto 2px !important;letter-spacing:-1px;text-align:center !important;color:var(--brown) !important;display:block;width:100%;}
+.tagline{font-family:'Sacramento',cursive;font-weight:400;font-size:clamp(40px,6.2vw,72px);color:var(--brown);text-align:center !important;display:block;width:100%;line-height:1.02;margin:4px 0 24px;}
 .head h1.brand .b1{color:var(--brown);}
 .head h1.brand .b2{color:var(--orange);}
 .head h1 em{font-style:italic;color:var(--orange);}
-.lede{max-width:760px;font-size:16.5px;color:rgba(59,26,13,.74);margin:0 auto 30px;text-align:center;}
+.lede{max-width:760px;font-size:16.5px;color:rgba(59,26,13,.74);margin:0 auto 30px;text-align:center !important;}
 .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--olive);border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;background:var(--paper);}
 .grid{display:grid;grid-template-columns:380px 1fr;gap:26px;align-items:start;}
 @media(max-width:880px){.grid{grid-template-columns:1fr;}}
@@ -71,9 +71,9 @@ body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;co
 .empty p{max-width:340px;font-size:14.5px;}
 .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
 @media(max-width:560px){.summary{grid-template-columns:1fr 1fr;}}
-.stat{background:var(--cream-2);border:1px solid var(--line);border-radius:14px;padding:13px 14px;}
+.stat{background:var(--cream-2);border:1px solid var(--line);border-radius:14px;padding:13px 14px;min-width:0;}
 .stat .k{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(59,26,13,.55);}
-.stat .v{font-family:'Fraunces',serif;font-weight:600;font-size:25px;line-height:1.1;margin-top:3px;}
+.stat .v{font-family:'Fraunces',serif;font-weight:600;font-size:25px;line-height:1.1;margin-top:3px;overflow-wrap:anywhere;}
 .stat .v span{font-size:13px;font-weight:500;color:rgba(59,26,13,.55);font-family:'Plus Jakarta Sans',sans-serif;}
 .stat.hi{background:var(--orange);border-color:var(--orange);color:#fff;}
 .stat.hi .k{color:rgba(255,255,255,.8);}
@@ -226,8 +226,9 @@ table{width:100%;border-collapse:collapse;}
   .btn-mini{min-width:0;flex:1 1 auto;}
   .btn-cart-big{padding:14px 16px;gap:11px;}
   .btn-cart-big .bc-tx{font-size:16px;}
-  .head h1{font-size:34px;}
+  h1.brand{font-size:38px !important;}
   .lede{font-size:15px;}
+  .stat .v{font-size:21px;}
 }
 </style>
 </head>
@@ -828,7 +829,7 @@ function render(){
   html+=stat("Sladkých kousků", '<span class="cnt" data-to="'+sweetPieces+'">0</span>', "");
   html+='<div class="stat hi"><div class="k">Cena celkem</div><div class="v"><span class="cnt" data-to="'+total+'" data-fmt="1">0</span> <span>Kč</span></div></div>';
   html+='</div>';
-  var cols2=(misaPieces>0)?"1fr 1fr 1fr":"1fr 1fr";
+  var cols2="repeat(auto-fit,minmax(110px,1fr))";
   html+='<div class="summary" style="grid-template-columns:'+cols2+';margin-top:-10px;">';
   html+=stat("Cena na osobu", fmt(perPerson)+" Kč", "");
   if(misaPieces>0){ html+=stat("Obložené mísy", misaPieces+" "+(misaPieces===1?"mísa":(misaPieces<5?"mísy":"mís")), ""); }
