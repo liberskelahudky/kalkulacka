@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lahůdkomat Libeřských lahůdek – sestaví vám pohoštění na míru podle počtu hostů, typu akce a rozpočtu. Chlebíčky, kanapky, mísy i dezerty na pár kliknutí.">
+  <meta name="theme-color" content="#E85520">
 <title>Lahůdkomat – Libeřské lahůdky</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Ms+Madi&display=swap" rel="stylesheet">
 <style>
 :root{
   --orange:#E85520; --brown:#3B1A0D; --olive:#6B7A50; --cream:#F0E8D6;
@@ -23,7 +25,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;co
 .logo{height:46px;width:auto;display:block;}
 .logo-fallback{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--orange);}
 h1.brand{font-family:'Fraunces',serif !important;font-weight:700 !important;font-size:clamp(40px,6vw,64px) !important;line-height:1.02;margin:8px auto 2px !important;letter-spacing:-1px;text-align:center !important;color:var(--brown) !important;display:block;width:100%;}
-.tagline{font-family:'Sacramento',cursive;font-weight:400;font-size:clamp(40px,6.2vw,72px);color:var(--brown);text-align:center !important;display:block;width:100%;line-height:1.02;margin:4px 0 24px;}
+.tagline{font-family:'Ms Madi',cursive;font-weight:400;font-size:clamp(40px,6.2vw,72px);color:var(--brown);text-align:center !important;display:block;width:100%;line-height:1.02;margin:4px 0 24px;}
 .head h1.brand .b1{color:var(--brown);}
 .head h1.brand .b2{color:var(--orange);}
 .head h1 em{font-style:italic;color:var(--orange);}
@@ -252,6 +254,18 @@ table{width:100%;border-collapse:collapse;}
 .opts.daypick .opt.sel{background:var(--orange);color:#fff;border-color:var(--orange);}
 .daynote{margin-top:9px;font-size:13px;line-height:1.45;color:rgba(59,26,13,.72);background:var(--cream-2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;}
 .daypick .opt small{font-weight:500;}
+@media(max-width:560px){
+  .line td{padding:7px 2px;}
+  .thumb{width:30px;height:30px;font-size:15px;border-radius:8px;}
+  .linehead{gap:8px;}
+  .name a{font-size:12.5px;}
+  .unit{font-size:11.5px;}
+  .tag{font-size:10px;padding:1px 5px;}
+  .qty button{width:23px;height:23px;font-size:14px;}
+  .qty .n{min-width:18px;font-size:14px;}
+  .sum{font-size:12px;}
+  .swap,.del{width:23px;height:23px;font-size:11px;margin-right:3px;}
+}
 </style>
 </head>
 <body>
@@ -271,7 +285,7 @@ table{width:100%;border-collapse:collapse;}
         <label class="lbl">Počet hostů</label>
         <div class="stepper">
           <button type="button" onclick="bumpPeople(-1)">−</button>
-          <input id="people" type="number" min="1" max="500" value="15" inputmode="numeric">
+          <input id="people" type="number" min="1" max="500" value="15" inputmode="numeric" aria-label="Počet hostů">
           <button type="button" onclick="bumpPeople(1)">+</button>
         </div>
       </div>
@@ -303,7 +317,7 @@ table{width:100%;border-collapse:collapse;}
       <div class="field">
         <label class="lbl">Skladba chutí</label>
         <div class="slider-wrap">
-          <input type="range" id="styleRange" class="rng" min="0" max="4" step="1" value="2" oninput="document.getElementById('styleVal').textContent=styleName(parseInt(this.value,10));">
+          <input type="range" id="styleRange" class="rng" aria-label="Poměr masitých a vegetariánských" min="0" max="4" step="1" value="2" oninput="document.getElementById('styleVal').textContent=styleName(parseInt(this.value,10));">
           <div class="slider-val" id="styleVal">Vyvážené</div>
           <div class="slider-ends"><span>Jen masité</span><span>Jen vege</span></div>
         </div>
@@ -312,7 +326,7 @@ table{width:100%;border-collapse:collapse;}
       <div class="field">
         <label class="lbl">Chlebíčky ↔ kanapky</label>
         <div class="slider-wrap">
-          <input type="range" id="sizeRange" class="rng" min="0" max="4" step="1" value="2" oninput="document.getElementById('sizeVal').textContent=sizeName(parseInt(this.value,10));">
+          <input type="range" id="sizeRange" class="rng" aria-label="Poměr chlebíčků a kanapek" min="0" max="4" step="1" value="2" oninput="document.getElementById('sizeVal').textContent=sizeName(parseInt(this.value,10));">
           <div class="slider-val" id="sizeVal">Vyvážené</div>
           <div class="slider-ends"><span>Jen chlebíčky</span><span>Jen kanapky</span></div>
         </div>
@@ -340,7 +354,7 @@ table{width:100%;border-collapse:collapse;}
       <div class="field" style="margin-top:18px;">
         <label class="lbl">Strop rozpočtu <span class="hint">nepovinné</span></label>
         <div class="budget-row">
-          <input id="budget" type="number" min="0" step="100" placeholder="např. 5000" inputmode="numeric">
+          <input id="budget" type="number" min="0" step="100" placeholder="např. 5000" inputmode="numeric" aria-label="Rozpočet v korunách">
           <span class="unit">Kč</span>
         </div>
       </div>
@@ -984,7 +998,7 @@ function printOrder(){
   doc+="<div class=\"sub\">"+s.people+" hostů · "+occName(s.occ)+" · vyzvednutí: "+dayName(s.day)+"</div>";
   doc+="<table>"+rows+"</table>";
   doc+="<div class=\"tot\"><span>Celkem k objednání</span><span>"+fmt(total)+" Kč</span></div>";
-  doc+="<div class=\"meta\"><b>"+dlTxt+"</b><br>"+ship+"<br>Objednávky: objednavky@liberskelahudky.cz · +420 734 449 901<br><span style=\"color:#999\">Ceny vč. DPH, orientační. Sestaveno Pochoutkovým manuálem.</span></div>";
+  doc+="<div class=\"meta\"><b>"+dlTxt+"</b><br>"+ship+"<br>Objednávky: objednavky@liberskelahudky.cz · +420 734 449 901<br><span style=\"color:#999\">Ceny vč. DPH, orientační. Sestaveno Lahůdkomatem.</span></div>";
   doc+="</body></html>";
   var w=window.open("","llprint","width=820,height=900");
   if(!w){ toast("Povolte prosím vyskakovací okna"); return; }
