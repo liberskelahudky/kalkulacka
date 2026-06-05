@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rautomat – Libeřské lahůdky</title>
+<title>Lahůdkomat – Libeřské lahůdky</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
@@ -243,7 +243,7 @@ table{width:100%;border-collapse:collapse;}
 <body>
 <div class="wrap">
 
-  <h1 class="brand">Rautomat</h1>
+  <h1 class="brand">Lahůdkomat</h1>
   <p class="tagline">Pohoštění na pár kliknutí</p>
   <p class="lede">Řekněte nám, kolik máte hostů, jaký druh akce chystáte, na co mají chuť a kolik chcete utratit. My z aktuální nabídky Libeřských lahůdek sestavíme vyvážený návrh košíku – chlebíčky, kanapky, obložené mísy, dezerty i doplňky – s počty, cenami a přidáním přímo do košíku.</p>
 
@@ -335,16 +335,16 @@ table{width:100%;border-collapse:collapse;}
       <div class="empty">
         <div class="ico">🍽️</div>
         <h2 style="margin-bottom:6px;">Stůl je zatím prázdný</h2>
-        <p>Vyplňte nastavení akce vlevo a stiskněte <strong>Vydat pohoštění</strong>. Rautomat vám naskládá hotový návrh košíku, který můžete dál upravovat.</p>
+        <p>Vyplňte nastavení akce vlevo a stiskněte <strong>Vydat pohoštění</strong>. Lahůdkomat vám naskládá hotový návrh košíku, který můžete dál upravovat.</p>
       </div>
     </div>
 
   </div>
   <div class="guide">
-    <h3>Jak Rautomat funguje</h3>
+    <h3>Jak Lahůdkomat funguje</h3>
     <div class="guide-steps">
       <div class="gstep"><span class="gnum">1</span><div><strong>Nastavte akci</strong><br>Počet hostů, typ akce, den vyzvednutí, skladbu chutí, velikost soust a rozpočet.</div></div>
-      <div class="gstep"><span class="gnum">2</span><div><strong>Stiskněte „Vydat pohoštění"</strong><br>Rautomat sestaví vyvážený návrh košíku na míru.</div></div>
+      <div class="gstep"><span class="gnum">2</span><div><strong>Stiskněte „Vydat pohoštění"</strong><br>Lahůdkomat sestaví vyvážený návrh košíku na míru.</div></div>
       <div class="gstep"><span class="gnum">3</span><div><strong>Dolaďte počty</strong><br>Tlačítky − a + měníte množství, 🔄 vymění daný druh za jiný a ✕ položku odebere.</div></div>
       <div class="gstep"><span class="gnum">4</span><div><strong>Přidejte vše do košíku</strong><br>Tlačítko „Přidat vše do košíku" naskládá celý návrh přímo na lahudky.cz.</div></div>
     </div>
@@ -756,7 +756,7 @@ function trimToBudget(lines, budget){
   var out=[]; for(i=0;i<lines.length;i++){ if(lines[i].qty>0){ out.push(lines[i]); } } return out;
 }
 
-function dispense(cb){ if(typeof document==="undefined"){ cb(); return; } var ov=document.createElement("div"); ov.className="disp-ov"; ov.innerHTML='<div class="disp-card"><div class="coil"><span class="coil-item">🥪</span></div><div class="disp-h">Vydávám pohoštění…</div><div class="disp-sub">Rautomat skládá váš tác</div></div>'; document.body.appendChild(ov); setTimeout(function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } cb(); },750); }
+function dispense(cb){ if(typeof document==="undefined"){ cb(); return; } var ov=document.createElement("div"); ov.className="disp-ov"; ov.innerHTML='<div class="disp-card"><div class="coil"><span class="coil-item">🥪</span></div><div class="disp-h">Vydávám pohoštění…</div><div class="disp-sub">Lahůdkomat skládá váš tác</div></div>'; document.body.appendChild(ov); setTimeout(function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } cb(); },750); }
 function generate(){ lastSettings=readSettings(); dispense(function(){ cart=buildCart(lastSettings); wasFree=false; render(); confetti(); toast("Hotovo – tác je naskládaný"); }); }
 function reshuffle(){ if(!lastSettings){ return; } seed=Math.floor(Math.random()*1000000)+1; cart=buildCart(lastSettings); render(); toast("Nový výběr namíchán"); }
 
@@ -982,7 +982,7 @@ function addAllToCart(){
   var secs=Math.round(total*2.5);
   var btn=document.querySelector(".btn-cart-big"); if(btn){ btn.disabled=true; }
   var ov=document.createElement("div"); ov.className="cart-inline active";
-  ov.innerHTML='<div style="text-align:center;"><div style="font-size:36px;line-height:1;">🛒</div><div class="cart-h" style="margin:8px 0 6px;">Otevře se okno s košíkem</div><div class="cart-sub" style="font-size:14px;">Rautomat otevře <b>nové okno s košíkem na lahudky.cz</b> a postupně do něj přidá <b>'+total+' položek</b> (cca '+secs+' s). Okno prosím <b>nechte otevřené</b>, dokud se vše nepřidá – pak se v něm objeví hotový košík.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;"><button type="button" class="btn-mini ci-go" style="max-width:210px;background:var(--orange);color:#fff;border-color:var(--orange);font-size:14px;">Pokračovat – naskládat košík →</button><button type="button" class="btn-mini ci-cancel" style="max-width:100px;">Zrušit</button></div></div>';
+  ov.innerHTML='<div style="text-align:center;"><div style="font-size:36px;line-height:1;">🛒</div><div class="cart-h" style="margin:8px 0 6px;">Otevře se okno s košíkem</div><div class="cart-sub" style="font-size:14px;">Lahůdkomat otevře <b>nové okno s košíkem na lahudky.cz</b> a postupně do něj přidá <b>'+total+' položek</b> (cca '+secs+' s). Okno prosím <b>nechte otevřené</b>, dokud se vše nepřidá – pak se v něm objeví hotový košík.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;"><button type="button" class="btn-mini ci-go" style="max-width:210px;background:var(--orange);color:#fff;border-color:var(--orange);font-size:14px;">Pokračovat – naskládat košík →</button><button type="button" class="btn-mini ci-cancel" style="max-width:100px;">Zrušit</button></div></div>';
   if(btn&&btn.parentNode){ btn.parentNode.insertBefore(ov, btn.nextSibling); } else { document.body.appendChild(ov); }
   try{ ov.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){}
   var cb=ov.querySelector(".ci-cancel"); if(cb){ cb.onclick=function(){ if(btn){ btn.disabled=false; } if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; }
