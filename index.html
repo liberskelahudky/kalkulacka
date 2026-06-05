@@ -18,7 +18,7 @@ html,body{margin:0;padding:0;overflow-x:hidden;}
 body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;color:var(--brown);
   background:transparent;
   line-height:1.5;-webkit-font-smoothing:antialiased;}
-.wrap{max-width:1320px;margin:0 auto;padding:40px 24px 72px;}
+.wrap{max-width:1480px;margin:0 auto;padding:40px 24px 72px;}
 .head{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
 .logo{height:46px;width:auto;display:block;}
 .logo-fallback{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--orange);}
@@ -29,11 +29,11 @@ h1.brand{font-family:'Fraunces',serif !important;font-weight:700 !important;font
 .head h1 em{font-style:italic;color:var(--orange);}
 .lede{max-width:760px;font-size:16.5px;color:rgba(59,26,13,.74);margin:0 auto 30px;text-align:center !important;}
 .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--olive);border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;background:var(--paper);}
-.grid{display:grid;grid-template-columns:380px 1fr;gap:26px;align-items:start;}
-@media(max-width:880px){.grid{grid-template-columns:1fr;}}
+.grid{display:grid;grid-template-columns:580px 1fr;gap:26px;align-items:start;}
+@media(max-width:980px){.grid{grid-template-columns:1fr;}}
 .card{background:var(--paper);border:1px solid var(--line-strong);border-radius:20px;box-shadow:0 22px 50px -26px rgba(59,26,13,.4);padding:24px;}
 .card.sticky{position:sticky;top:18px;}
-@media(max-width:880px){.card.sticky{position:static;}}
+@media(max-width:980px){.card.sticky{position:static;}}
 .card h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0 0 4px;letter-spacing:-.2px;}
 .card .sub{font-size:13.5px;color:rgba(59,26,13,.6);margin:0 0 18px;}
 .field{margin-bottom:18px;}
@@ -44,9 +44,9 @@ h1.brand{font-family:'Fraunces',serif !important;font-weight:700 !important;font
 .stepper button:hover{background:var(--orange);color:#fff;border-color:var(--orange);}
 .stepper input{flex:1;text-align:center;border:1px solid var(--line-strong);border-left:none;border-right:none;font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--brown);background:var(--paper);width:60px;}
 .stepper input:focus{outline:none;}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .opts.three{grid-template-columns:1fr 1fr 1fr;}
-.opt{position:relative;border:1px solid var(--line-strong);border-radius:13px;padding:11px 12px;cursor:pointer;background:var(--cream-2);transition:.15s;font-size:13.5px;font-weight:600;text-align:center;user-select:none;}
+.opt{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:54px;border:1px solid var(--line-strong);border-radius:13px;padding:10px 12px;cursor:pointer;background:var(--cream-2);transition:.15s;font-size:13.5px;font-weight:600;text-align:center;user-select:none;}
 .opt small{display:block;font-weight:500;color:rgba(59,26,13,.55);font-size:11.5px;margin-top:2px;}
 .opt:hover{border-color:var(--olive);}
 .opt input{position:absolute;opacity:0;pointer-events:none;}
@@ -216,6 +216,8 @@ table{width:100%;border-collapse:collapse;}
 
 @media(max-width:560px){
   .wrap{padding:20px 14px 56px;}
+  .opts{grid-template-columns:1fr 1fr;}
+  .opts.three{grid-template-columns:1fr 1fr 1fr;}
   .card{padding:18px;}
   .thumb{width:36px;height:36px;font-size:18px;border-radius:9px;}
   .linehead{gap:9px;}
@@ -238,6 +240,18 @@ table{width:100%;border-collapse:collapse;}
 .gstep{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:rgba(59,26,13,.85);line-height:1.5;}
 .gstep .gnum{flex:none;width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;}
 @media(max-width:560px){.guide-steps{grid-template-columns:1fr;}.guide{padding:18px;}}
+.slider-wrap{padding:4px 2px 2px;}
+.rng{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:6px;background:linear-gradient(90deg,var(--cream-2),var(--olive));border:1px solid var(--line-strong);outline:none;margin:8px 0 6px;}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:var(--orange);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.28);cursor:pointer;}
+.rng::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--orange);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.28);cursor:pointer;}
+.slider-val{font-family:'Fraunces',serif;font-weight:600;color:var(--brown);font-size:16px;text-align:center;}
+.slider-ends{display:flex;justify-content:space-between;font-size:12px;color:rgba(59,26,13,.6);margin-top:3px;}
+.opts.daypick{display:flex;flex-wrap:wrap;gap:8px;grid-template-columns:none;}
+.opts.daypick{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.daypick .opt{min-height:auto;border-radius:999px;padding:10px 4px;background:var(--paper);font-size:14px;}
+.opts.daypick .opt.sel{background:var(--orange);color:#fff;border-color:var(--orange);}
+.daynote{margin-top:9px;font-size:13px;line-height:1.45;color:rgba(59,26,13,.72);background:var(--cream-2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;}
+.daypick .opt small{font-weight:500;}
 </style>
 </head>
 <body>
@@ -274,39 +288,42 @@ table{width:100%;border-collapse:collapse;}
 
       <div class="field">
         <label class="lbl">Den vyzvednutí <span class="hint">dostupnost a uzávěrka objednávky</span></label>
-        <div class="opts">
-          <label class="opt" data-day="mon">Pondělí<small>vše</small><input type="radio" name="day" value="mon"></label>
-          <label class="opt sel" data-day="week">Út–Pá<small>vše</small><input type="radio" name="day" value="week" checked></label>
-          <label class="opt" data-day="sat">Sobota<small>bez buchet/koláčů</small><input type="radio" name="day" value="sat"></label>
-          <label class="opt" data-day="sun">Neděle<small>jen chleb./kan./mísy</small><input type="radio" name="day" value="sun"></label>
+        <div class="opts daypick">
+          <label class="opt" data-day="po" onclick="updateDayNote('po')">Po<input type="radio" name="day" value="po"></label>
+          <label class="opt" data-day="ut" onclick="updateDayNote('ut')">Út<input type="radio" name="day" value="ut"></label>
+          <label class="opt sel" data-day="st" onclick="updateDayNote('st')">St<input type="radio" name="day" value="st" checked></label>
+          <label class="opt" data-day="ct" onclick="updateDayNote('ct')">Čt<input type="radio" name="day" value="ct"></label>
+          <label class="opt" data-day="pa" onclick="updateDayNote('pa')">Pá<input type="radio" name="day" value="pa"></label>
+          <label class="opt" data-day="so" onclick="updateDayNote('so')">So<input type="radio" name="day" value="so"></label>
+          <label class="opt" data-day="ne" onclick="updateDayNote('ne')">Ne<input type="radio" name="day" value="ne"></label>
         </div>
+        <div class="daynote" id="dayNote"></div>
       </div>
 
       <div class="field">
         <label class="lbl">Skladba chutí</label>
-        <div class="opts">
-          <label class="opt" data-style="meat">Spíše masité<small>vege ~15 %</small><input type="radio" name="style" value="meat"></label>
-          <label class="opt sel" data-style="mix">Vyvážené<small>vege ~30 %</small><input type="radio" name="style" value="mix" checked></label>
-          <label class="opt" data-style="moreveg">Více zeleninové<small>vege ~60 %</small><input type="radio" name="style" value="moreveg"></label>
-          <label class="opt" data-style="vege">Jen vegetariánské<small>100 % vege</small><input type="radio" name="style" value="vege"></label>
+        <div class="slider-wrap">
+          <input type="range" id="styleRange" class="rng" min="0" max="4" step="1" value="2" oninput="document.getElementById('styleVal').textContent=styleName(parseInt(this.value,10));">
+          <div class="slider-val" id="styleVal">Vyvážené</div>
+          <div class="slider-ends"><span>Jen masité</span><span>Jen vege</span></div>
         </div>
       </div>
 
       <div class="field">
-        <label class="lbl">Velikost soust</label>
-        <div class="opts three">
-          <label class="opt" data-size="chleb">Spíše chlebíčky<small>sytější</small><input type="radio" name="size" value="chleb"></label>
-          <label class="opt sel" data-size="bal">Vyvážené<small>mix</small><input type="radio" name="size" value="bal" checked></label>
-          <label class="opt" data-size="kan">Spíše jednohubky<small>kanapky</small><input type="radio" name="size" value="kan"></label>
+        <label class="lbl">Chlebíčky ↔ kanapky</label>
+        <div class="slider-wrap">
+          <input type="range" id="sizeRange" class="rng" min="0" max="4" step="1" value="2" oninput="document.getElementById('sizeVal').textContent=sizeName(parseInt(this.value,10));">
+          <div class="slider-val" id="sizeVal">Vyvážené</div>
+          <div class="slider-ends"><span>Jen chlebíčky</span><span>Jen kanapky</span></div>
         </div>
       </div>
 
       <div class="field">
-        <label class="lbl">Sladká tečka <span class="hint">krémové dezerty</span></label>
+        <label class="lbl">Dezerty <span class="hint">kolik jich přidat</span></label>
         <div class="opts three">
-          <label class="opt" data-sweet="none">Bez<small>—</small><input type="radio" name="sweet" value="none"></label>
-          <label class="opt sel" data-sweet="some">Něco málo<small>~½ / os</small><input type="radio" name="sweet" value="some" checked></label>
-          <label class="opt" data-sweet="full">Pořádně<small>~1 / os</small><input type="radio" name="sweet" value="full"></label>
+          <label class="opt" data-sweet="none">Bez dezertů<small>—</small><input type="radio" name="sweet" value="none"></label>
+          <label class="opt sel" data-sweet="some">Na ochutnání<small>~½ na osobu</small><input type="radio" name="sweet" value="some" checked></label>
+          <label class="opt" data-sweet="full">Pro každého<small>~1 na osobu</small><input type="radio" name="sweet" value="full"></label>
         </div>
       </div>
 
@@ -630,7 +647,7 @@ function readSettings(){
   var people=parseInt(document.getElementById("people").value,10); if(isNaN(people)||people<1){ people=1; }
   var budget=parseInt(document.getElementById("budget").value,10); if(isNaN(budget)||budget<=0){ budget=0; }
   return {
-    people:people, day:getRadio("day"), occ:getRadio("occ"), style:getRadio("style"), size:getRadio("size"), sweet:getRadio("sweet"),
+    people:people, day:getRadio("day"), occ:getRadio("occ"), style:sliderVal("styleRange"), size:sliderVal("sizeRange"), sweet:getRadio("sweet"),
     misa:document.getElementById("misa").checked, noFish:document.getElementById("fish").checked,
     sweetPastry:document.getElementById("sweetPastry").checked, briosky:document.getElementById("briosky").checked,
     bagety:document.getElementById("bagety").checked, burger:document.getElementById("burger").checked,
@@ -639,8 +656,12 @@ function readSettings(){
 }
 
 function piecesPerPerson(occ){ if(occ==="coffee"){return 3.5;} if(occ==="meeting"){return 4.5;} if(occ==="feast"){return 8;} return 5.5; }
-function vegeRatio(style){ if(style==="meat"){return 0.15;} if(style==="moreveg"){return 0.6;} if(style==="vege"){return 1;} return 0.3; }
-function sizeSplit(size){ if(size==="chleb"){return 0.7;} if(size==="kan"){return 0.25;} return 0.5; }
+
+function sliderVal(id){ var el=document.getElementById(id); return el?parseInt(el.value,10):0; }
+function sizeName(v){ var a=["Jen chlebíčky","Spíš chlebíčky","Vyvážené","Spíš kanapky","Jen kanapky"]; return a[v]!==undefined?a[v]:"Vyvážené"; }
+function styleName(v){ var a=["Jen masité","Spíš masité","Vyvážené","Víc zeleniny","Jen vege"]; return a[v]!==undefined?a[v]:"Vyvážené"; }
+function sizeSplit(v){ var a=[1.0,0.72,0.5,0.28,0.0]; return a[v]!==undefined?a[v]:0.5; }
+function vegeRatio(v){ var a=[0.0,0.18,0.35,0.65,1.0]; return a[v]!==undefined?a[v]:0.35; }
 
 var FLAVOR_STEMS=["roastbeef","rosb","hermelin","sunk","salam","krab","losos","debrecin","herkules","gurman","cabaj","krkovic","caprese","cesnek","zerve","tun","kur","slanin","hovez","repa","vejc","syr","tvaroh","povidl","merunk","jablk","orech","cokolad","kakao","svestk","boruvk","malin","vanilk","pistac","kokos","citron","jahod","pernik","marmelad","tresn","visn","mak"];
 function deburr(s){ s=s.toLowerCase();
@@ -674,14 +695,15 @@ function pickSpread(pool, totalCount){
 function poolFor(cat, needVege, noFish){
   var out=[],i,p; for(i=0;i<CATALOG.length;i++){ p=CATALOG[i]; if(p.cat!==cat){continue;} if(p.cb){continue;} if(needVege&&!p.vege){continue;} if(noFish&&p.fish){continue;} out.push(p); } return out;
 }
+function poolMeat(cat, noFish){ var all=poolFor(cat,false,noFish), out=[], i; for(i=0;i<all.length;i++){ if(!all[i].vege){ out.push(all[i]); } } return out; }
 
 function buildCartGen(s, gen){
   var lines=[];
   var misaCount=0;
   if(s.misa){
     misaCount=Math.round(s.people/12*gen); if(misaCount<1){misaCount=1;}
-    var mpool=poolFor("misa", s.style==="vege", s.noFish);
-    if(mpool.length){ var mp=shuffle(mpool)[0]; lines.push({id:mp.id,qty:misaCount}); }
+    var mpool=poolFor("misa", s.style===4, s.noFish);
+    if(mpool.length){ var pickMisa=function(fr){ var k; for(k=0;k<mpool.length;k++){ if(mpool[k].name.toLowerCase().indexOf(fr)>=0){ return mpool[k]; } } return null; }; var mp=null; if(s.style>=3){ mp=pickMisa("zelenin")||pickMisa("sýr"); } else if(s.style<=1){ mp=pickMisa("uzenin")||pickMisa("roastbeef")||pickMisa("řízk"); } else { mp=pickMisa("mix"); } if(!mp){ mp=shuffle(mpool)[0]; } lines.push({id:mp.id,qty:misaCount}); }
   }
   var per=piecesPerPerson(s.occ)*gen, totalSavory=Math.round(s.people*per);
   if(misaCount>0){ totalSavory=Math.round(totalSavory*0.8); }
@@ -689,13 +711,13 @@ function buildCartGen(s, gen){
   var chlebTotal=Math.round(totalSavory*sizeSplit(s.size)), kanTotal=totalSavory-chlebTotal, vr=vegeRatio(s.style);
   var chVege=Math.round(chlebTotal*vr), chRest=chlebTotal-chVege;
   appendPicks(lines, pickSpread(poolFor("chleb",true,s.noFish), chVege));
-  appendPicks(lines, pickSpread(poolFor("chleb", s.style==="vege", s.noFish), chRest));
+  appendPicks(lines, pickSpread(poolMeat("chleb", s.noFish), chRest));
   var kaVege=Math.round(kanTotal*vr), kaRest=kanTotal-kaVege;
   appendPicks(lines, pickSpread(poolFor("kan",true,s.noFish), kaVege));
-  appendPicks(lines, pickSpread(poolFor("kan", s.style==="vege", s.noFish), kaRest));
-  if(s.briosky&&catAvailable("brioska",s.day)){ var brT=Math.round(s.people*0.4*gen); if(brT<1){brT=1;} appendPicks(lines, pickSpread(poolFor("brioska", s.style==="vege", s.noFish), brT)); }
-  if(s.bagety&&catAvailable("bageta",s.day)){ var bgT=Math.round(s.people/4*gen); if(bgT<1){bgT=1;} appendPicks(lines, pickSpread(poolFor("bageta", s.style==="vege", s.noFish), bgT)); }
-  if(s.burger&&catAvailable("burger",s.day)){ var buB=Math.round(s.people/12*gen); if(buB<1){buB=1;} appendPicks(lines, pickSpread(poolFor("burger", s.style==="vege", false), buB)); }
+  appendPicks(lines, pickSpread(poolMeat("kan", s.noFish), kaRest));
+  if(s.briosky&&catAvailable("brioska",s.day)){ var brT=Math.round(s.people*0.4*gen); if(brT<1){brT=1;} appendPicks(lines, pickSpread(poolFor("brioska", s.style===4, s.noFish), brT)); }
+  if(s.bagety&&catAvailable("bageta",s.day)){ var bgT=Math.round(s.people/4*gen); if(bgT<1){bgT=1;} appendPicks(lines, pickSpread(poolFor("bageta", s.style===4, s.noFish), bgT)); }
+  if(s.burger&&catAvailable("burger",s.day)){ var buB=Math.round(s.people/12*gen); if(buB<1){buB=1;} appendPicks(lines, pickSpread(poolFor("burger", s.style===4, false), buB)); }
   if(s.sweet!=="none"&&catAvailable("dezert",s.day)){ var dezPer=(s.sweet==="full")?1:0.5; var dezTotal=Math.round(s.people*dezPer*gen); if(dezTotal<1){dezTotal=1;} appendPicks(lines, pickSpread(poolFor("dezert",false,s.noFish), dezTotal)); }
   if(s.sweetPastry&&catAvailable("kolacek",s.day)){ var spT=Math.round(s.people*0.66*gen); if(spT<1){spT=1;} appendPicks(lines, pickSpread(poolFor("kolacek",false,false), spT)); }
   return mergeLines(lines);
@@ -808,19 +830,25 @@ function confetti(){
   })(); }
   setTimeout(function(){ if(cont.parentNode){ cont.parentNode.removeChild(cont); } },2700);
 }
-function catAvailable(cat, day){
+function initDayNote(){ try{ updateDayNote(getRadio("day")); }catch(e){} }
+if(window.addEventListener){ window.addEventListener("DOMContentLoaded", initDayNote); }
+function dayGroup(d){ if(d==="po"){return "mon";} if(d==="so"){return "sat";} if(d==="ne"){return "sun";} return "week"; }
+function catAvailable(cat, day){ day=dayGroup(day);
   if(day==="sun"){ return (cat==="chleb"||cat==="kan"||cat==="misa"); }
   if(day==="sat"){ return !(cat==="buchta"||cat==="kolac"); }
   return true;
 }
-function dayName(day){ if(day==="mon"){return "pondělí";} if(day==="sat"){return "sobota";} if(day==="sun"){return "neděle";} return "Út–Pá"; }
-function deadlineInfo(day){
+function dayName(day){ var m={po:"pondělí",ut:"úterý",st:"středa",ct:"čtvrtek",pa:"pátek",so:"sobota",ne:"neděle"}; return m[day]||day; }
+function capFirst(s){ return s?(s.charAt(0).toUpperCase()+s.slice(1)):s; }
+function dayNoteText(day){ var g=dayGroup(day), dl=deadlineInfo(day), avail; if(g==="sun"){ avail="dostupné jen chlebíčky, kanapky a obložené mísy"; } else if(g==="sat"){ avail="dostupné vše kromě buchet a krájených koláčů"; } else { avail="dostupný celý sortiment"; } return "<b>"+capFirst(dayName(day))+":</b> "+avail+" · objednat nejpozději "+dl.ostatni+"."; }
+function updateDayNote(day){ var el=document.getElementById("dayNote"); if(el){ el.innerHTML=dayNoteText(day); } }
+function deadlineInfo(day){ day=dayGroup(day);
   if(day==="mon"){ return {ostatni:"v neděli do 11:00", kolace:"v sobotu do 10:00"}; }
   if(day==="sat"){ return {ostatni:"v pátek do 14:00", kolace:"ve čtvrtek do 14:00"}; }
   if(day==="sun"){ return {ostatni:"v pátek do 14:00", kolace:"v pátek do 14:00"}; }
   return {ostatni:"den předem do 14:00", kolace:"den předem do 10:00"};
 }
-function availabilityNote(day){
+function availabilityNote(day){ day=dayGroup(day);
   if(day==="sun"){ return " V neděli jsou dostupné jen chlebíčky, klasické i premium kanapky a obložené mísy."; }
   if(day==="sat"){ return " V sobotu nelze objednat buchty a krájené koláče."; }
   return "";
@@ -869,8 +897,8 @@ function render(){
   html+='<div class="ship-bar"><div class="ship-fill" data-pct="'+pct+'"></div></div>';
   if(total<FREE_FROM){ html+='<div class="ship-hint">jinak doprava po Praze 190 Kč</div>'; }
   html+='</div>';
-  if(s.day==="sun"&&(s.sweet!=="none"||s.sweetPastry||s.briosky||s.bagety||s.burger)){ html+='<div class="note">V neděli jsme vynechali sladké a doplňky – nejsou v tento den dostupné.</div>'; }
-  if(s.day==="sat"&&false){ }
+  if(dayGroup(s.day)==="sun"&&(s.sweet!=="none"||s.sweetPastry||s.briosky||s.bagety||s.burger)){ html+='<div class="note">V neděli jsme vynechali sladké a doplňky – nejsou v tento den dostupné.</div>'; }
+  if(dayGroup(s.day)==="sat"&&false){ }
   if(s.budget>0&&total>s.budget){ html+='<div class="note">Nepodařilo se srovnat přesně do rozpočtu (drží minimum 1 ks u položky). Uberte ručně nebo zvyšte strop.</div>'; }
   else if(s.budget>0){ var lo=s.budget-total; if(lo>s.budget*0.22){ html+='<div class="note">Tohle je pro daný počet hostů už pořádně vydatné pohoštění. Jestli chcete vyčerpat celý rozpočet, přidejte další druhy nebo počty upravte ručně.</div>'; } else { html+='<div class="note">Návrh byl sestaven do rozpočtu '+fmt(s.budget)+' Kč.</div>'; } }
 
