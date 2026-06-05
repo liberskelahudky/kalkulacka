@@ -974,40 +974,48 @@ function addAllToCart(){
   var items=[],missing=0,i,p;
   for(i=0;i<cart.length;i++){ p=BYID[cart[i].id]; if(p.addId){ items.push(CART+"?add-to-cart="+p.addId+"&quantity="+cart[i].qty); } else { missing++; } }
   if(items.length===0){ toast("Žádná položka nemá napojení na košík"); return; }
-  var win=window.open("about:blank","llkosik");
-  if(!win){ toast("Povolte prosím vyskakovací okna pro tuto stránku"); return; }
-  try{
-    win.document.open();
-    win.document.write('<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Skládám košík…</title></head><body style="margin:0;font-family:Arial,Helvetica,sans-serif;background:#F0E8D6;color:#3B1A0D;display:flex;align-items:center;justify-content:center;min-height:100vh"><div style="text-align:center;max-width:460px;padding:30px"><div style="font-size:60px;margin-bottom:8px">🛒</div><h2 style="font-family:Georgia,serif;font-size:27px;margin:0 0 10px">Skládám vaše pohoštění do košíku…</h2><p style="font-size:16px;line-height:1.6;margin:0">Prosím <b>nezavírejte</b> toto okno. Košík se za chvíli začne plnit a až bude hotovo, sám se vám zobrazí.</p><div style="margin-top:22px;width:46px;height:46px;border:5px solid rgba(232,85,32,.25);border-top-color:#E85520;border-radius:50%;display:inline-block;animation:s 1s linear infinite"></div></div><style>@keyframes s{to{transform:rotate(360deg)}}</style></body></html>');
-    win.document.close();
-  }catch(e){}
-  try{ win.blur(); }catch(e){}
-  try{ window.focus(); }catch(e){}
   var total=items.length;
+  var secs=Math.round(total*2.5);
   var btn=document.querySelector(".btn-cart-big"); if(btn){ btn.disabled=true; }
   var ov=document.createElement("div"); ov.className="cart-inline active";
-  ov.innerHTML='<div class="ci-row"><span class="cart-spin small"></span><div><div class="cart-h" style="font-size:19px;margin-bottom:4px;">🛒 Skládá se košík v novém okně…</div><div class="cart-sub" style="margin:0;font-size:13.5px;">Otevřelo se <b>okno s košíkem na lahudky.cz</b> a postupně se do něj přidává vaše pohoštění. <b>Prosím nezavírejte ho</b> – až bude hotovo, košík se v něm sám zobrazí.</div></div></div><div class="cart-bar" style="height:12px;"><div class="cart-fill"></div></div><div class="cart-n" style="font-size:14px;margin-top:9px;">Přidáno <b class="cn">0</b> z '+total+' položek…</div>';
+  ov.innerHTML='<div style="text-align:center;"><div style="font-size:36px;line-height:1;">🛒</div><div class="cart-h" style="margin:8px 0 6px;">Otevře se okno s košíkem</div><div class="cart-sub" style="font-size:14px;">Rautomat otevře <b>nové okno s košíkem na lahudky.cz</b> a postupně do něj přidá <b>'+total+' položek</b> (cca '+secs+' s). Okno prosím <b>nechte otevřené</b>, dokud se vše nepřidá – pak se v něm objeví hotový košík.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;"><button type="button" class="btn-mini ci-go" style="max-width:210px;background:var(--orange);color:#fff;border-color:var(--orange);font-size:14px;">Pokračovat – naskládat košík →</button><button type="button" class="btn-mini ci-cancel" style="max-width:100px;">Zrušit</button></div></div>';
   if(btn&&btn.parentNode){ btn.parentNode.insertBefore(ov, btn.nextSibling); } else { document.body.appendChild(ov); }
   try{ ov.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){}
-  function upd(n){ var c=ov.querySelector(".cn"); if(c){ c.textContent=String(n); } var f=ov.querySelector(".cart-fill"); if(f){ f.style.width=Math.round(n/total*100)+"%"; } }
-  var idx=0, FALLBACK=2500, settled=false;
-  function advance(){ if(settled){ return; } settled=true; idx++; upd(idx); setTimeout(go,250); }
-  function go(){
-    if(idx>=items.length){ finish(); return; }
-    settled=false;
-    try{ win.location.href=items[idx]; }catch(e){}
-    try{ win.onload=function(){ advance(); }; }catch(e){}
-    setTimeout(advance, FALLBACK);
+  var cb=ov.querySelector(".ci-cancel"); if(cb){ cb.onclick=function(){ if(btn){ btn.disabled=false; } if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; }
+  var gb=ov.querySelector(".ci-go"); if(gb){ gb.onclick=function(){ startFill(); }; }
+
+  function startFill(){
+    var win=window.open("about:blank","llkosik");
+    if(!win){ toast("Povolte prosím vyskakovací okna pro tuto stránku"); if(btn){ btn.disabled=false; } if(ov.parentNode){ ov.parentNode.removeChild(ov); } return; }
+    try{
+      win.document.open();
+      win.document.write('<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Skládám košík…</title></head><body style="margin:0;font-family:Arial,Helvetica,sans-serif;background:#F0E8D6;color:#3B1A0D;display:flex;align-items:center;justify-content:center;min-height:100vh"><div style="text-align:center;max-width:460px;padding:30px"><div style="font-size:60px;margin-bottom:8px">🛒</div><h2 style="font-family:Georgia,serif;font-size:27px;margin:0 0 10px">Skládám vaše pohoštění do košíku…</h2><p style="font-size:16px;line-height:1.6;margin:0">Prosím <b>nezavírejte</b> toto okno. Košík se za chvíli začne plnit a až bude hotovo, sám se vám zobrazí.</p><div style="margin-top:22px;width:46px;height:46px;border:5px solid rgba(232,85,32,.25);border-top-color:#E85520;border-radius:50%;display:inline-block;animation:s 1s linear infinite"></div></div><style>@keyframes s{to{transform:rotate(360deg)}}</style></body></html>');
+      win.document.close();
+    }catch(e){}
+    try{ win.blur(); }catch(e){}
+    try{ window.focus(); }catch(e){}
+    ov.className="cart-inline active";
+    ov.innerHTML='<div class="ci-row"><span class="cart-spin small"></span><div><div class="cart-h" style="font-size:19px;margin-bottom:4px;">🛒 Skládá se košík v novém okně…</div><div class="cart-sub" style="margin:0;font-size:13.5px;">V okně s košíkem na lahudky.cz se teď postupně přidává vaše pohoštění. <b>Prosím nezavírejte ho</b> – až bude hotovo, košík se v něm sám zobrazí.</div></div></div><div class="cart-bar" style="height:12px;"><div class="cart-fill"></div></div><div class="cart-n" style="font-size:14px;margin-top:9px;">Přidáno <b class="cn">0</b> z '+total+' položek…</div>';
+    function upd(n){ var c=ov.querySelector(".cn"); if(c){ c.textContent=String(n); } var f=ov.querySelector(".cart-fill"); if(f){ f.style.width=Math.round(n/total*100)+"%"; } }
+    var idx=0, FALLBACK=2500, settled=false;
+    function advance(){ if(settled){ return; } settled=true; idx++; upd(idx); setTimeout(go,250); }
+    function go(){
+      if(idx>=items.length){ finish(); return; }
+      settled=false;
+      try{ win.location.href=items[idx]; }catch(e){}
+      try{ win.onload=function(){ advance(); }; }catch(e){}
+      setTimeout(advance, FALLBACK);
+    }
+    function finish(){
+      try{ win.location.href=CART; }catch(e){}
+      if(btn){ btn.disabled=false; }
+      ov.className="cart-inline";
+      ov.innerHTML='<div style="text-align:center;"><div class="cart-done">✓</div><div class="cart-h">Hotovo – košík je naplněný!</div><div class="cart-sub" style="font-size:14px;">Čeká na tebe v <b>druhém okně</b>'+(missing>0?(" · "+missing+" položek bez napojení přidejte ručně"):"")+'. Pro jistotu zkontroluj počet položek v košíku.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;"><button type="button" class="btn-mini cart-open" style="max-width:180px;background:var(--orange);color:#fff;border-color:var(--orange);">Otevřít košík →</button><button type="button" class="btn-mini cart-close" style="max-width:110px;">Zavřít</button></div></div>';
+      var bo=ov.querySelector(".cart-open"); if(bo){ bo.onclick=function(){ try{ win.focus(); }catch(e){} try{ if(win.closed){ window.open(CART,"llkosik"); } }catch(e){} }; }
+      var bc=ov.querySelector(".cart-close"); if(bc){ bc.onclick=function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; }
+    }
+    setTimeout(go,1700);
   }
-  function finish(){
-    try{ win.location.href=CART; }catch(e){}
-    if(btn){ btn.disabled=false; }
-    ov.className="cart-inline";
-    ov.innerHTML='<div style="text-align:center;"><div class="cart-done">✓</div><div class="cart-h">Hotovo – košík je naplněný!</div><div class="cart-sub" style="font-size:14px;">Čeká na tebe v <b>druhém okně</b>'+(missing>0?(" · "+missing+" položek bez napojení přidejte ručně"):"")+'. Pro jistotu zkontroluj počet položek v košíku.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;"><button type="button" class="btn-mini cart-open" style="max-width:180px;background:var(--orange);color:#fff;border-color:var(--orange);">Otevřít košík →</button><button type="button" class="btn-mini cart-close" style="max-width:110px;">Zavřít</button></div></div>';
-    var bo=ov.querySelector(".cart-open"); if(bo){ bo.onclick=function(){ try{ win.focus(); }catch(e){} try{ if(win.closed){ window.open(CART,"llkosik"); } }catch(e){} }; }
-    var bc=ov.querySelector(".cart-close"); if(bc){ bc.onclick=function(){ if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; }
-  }
-  setTimeout(go,1700);
 }
 
 function orderText(){
