@@ -675,17 +675,15 @@ function poolFor(cat, needVege, noFish){
   var out=[],i,p; for(i=0;i<CATALOG.length;i++){ p=CATALOG[i]; if(p.cat!==cat){continue;} if(p.cb){continue;} if(needVege&&!p.vege){continue;} if(noFish&&p.fish){continue;} out.push(p); } return out;
 }
 
-function buildCart(s){
+function buildCartGen(s, gen){
   var lines=[];
-  /* mísa */
   var misaCount=0;
   if(s.misa){
-    misaCount=Math.round(s.people/12); if(misaCount<1){misaCount=1;}
+    misaCount=Math.round(s.people/12*gen); if(misaCount<1){misaCount=1;}
     var mpool=poolFor("misa", s.style==="vege", s.noFish);
     if(mpool.length){ var mp=shuffle(mpool)[0]; lines.push({id:mp.id,qty:misaCount}); }
   }
-  /* slané */
-  var per=piecesPerPerson(s.occ), totalSavory=Math.round(s.people*per);
+  var per=piecesPerPerson(s.occ)*gen, totalSavory=Math.round(s.people*per);
   if(misaCount>0){ totalSavory=Math.round(totalSavory*0.8); }
   if(totalSavory<s.people){ totalSavory=s.people; }
   var chlebTotal=Math.round(totalSavory*sizeSplit(s.size)), kanTotal=totalSavory-chlebTotal, vr=vegeRatio(s.style);
@@ -695,19 +693,25 @@ function buildCart(s){
   var kaVege=Math.round(kanTotal*vr), kaRest=kanTotal-kaVege;
   appendPicks(lines, pickSpread(poolFor("kan",true,s.noFish), kaVege));
   appendPicks(lines, pickSpread(poolFor("kan", s.style==="vege", s.noFish), kaRest));
-  /* briošky */
-  if(s.briosky&&catAvailable("brioska",s.day)){ var brT=Math.round(s.people*0.4); if(brT<1){brT=1;} appendPicks(lines, pickSpread(poolFor("brioska", s.style==="vege", s.noFish), brT)); }
-  /* bagety */
-  if(s.bagety&&catAvailable("bageta",s.day)){ var bgT=Math.round(s.people/4); if(bgT<1){bgT=1;} appendPicks(lines, pickSpread(poolFor("bageta", s.style==="vege", s.noFish), bgT)); }
-  /* mini burgery */
-  if(s.burger&&catAvailable("burger",s.day)){ var buB=Math.round(s.people/12); if(buB<1){buB=1;} appendPicks(lines, pickSpread(poolFor("burger", s.style==="vege", false), buB)); }
-  /* dezerty */
-  if(s.sweet!=="none"&&catAvailable("dezert",s.day)){ var dezPer=(s.sweet==="full")?1:0.5; var dezTotal=Math.round(s.people*dezPer); if(dezTotal<1){dezTotal=1;} appendPicks(lines, pickSpread(poolFor("dezert",false,s.noFish), dezTotal)); }
-  /* koláčky */
-  if(s.sweetPastry&&catAvailable("kolacek",s.day)){ var spT=Math.round(s.people*0.66); if(spT<1){spT=1;} appendPicks(lines, pickSpread(poolFor("kolacek",false,false), spT)); }
-  /* rozpočet */
-  if(s.budget>0){ lines=trimToBudget(lines, s.budget); }
+  if(s.briosky&&catAvailable("brioska",s.day)){ var brT=Math.round(s.people*0.4*gen); if(brT<1){brT=1;} appendPicks(lines, pickSpread(poolFor("brioska", s.style==="vege", s.noFish), brT)); }
+  if(s.bagety&&catAvailable("bageta",s.day)){ var bgT=Math.round(s.people/4*gen); if(bgT<1){bgT=1;} appendPicks(lines, pickSpread(poolFor("bageta", s.style==="vege", s.noFish), bgT)); }
+  if(s.burger&&catAvailable("burger",s.day)){ var buB=Math.round(s.people/12*gen); if(buB<1){buB=1;} appendPicks(lines, pickSpread(poolFor("burger", s.style==="vege", false), buB)); }
+  if(s.sweet!=="none"&&catAvailable("dezert",s.day)){ var dezPer=(s.sweet==="full")?1:0.5; var dezTotal=Math.round(s.people*dezPer*gen); if(dezTotal<1){dezTotal=1;} appendPicks(lines, pickSpread(poolFor("dezert",false,s.noFish), dezTotal)); }
+  if(s.sweetPastry&&catAvailable("kolacek",s.day)){ var spT=Math.round(s.people*0.66*gen); if(spT<1){spT=1;} appendPicks(lines, pickSpread(poolFor("kolacek",false,false), spT)); }
   return mergeLines(lines);
+}
+function buildCart(s){
+  if(!(s.budget>0)){ return buildCartGen(s,1); }
+  var base=piecesPerPerson(s.occ);
+  var perMax=(s.occ==="coffee")?7:(s.occ==="meeting")?8:(s.occ==="feast")?14:10;
+  var genMax=perMax/base; if(genMax<1){ genMax=1; }
+  var best=null, bestTotal=-1, gen, build, t;
+  for(gen=1; gen<=genMax+0.001; gen+=0.15){
+    build=buildCartGen(s,gen); t=linesTotal(build);
+    if(t<=s.budget && t>bestTotal){ best=build; bestTotal=t; }
+  }
+  if(best===null){ best=trimToBudget(buildCartGen(s,1), s.budget); }
+  return mergeLines(best);
 }
 
 function appendPicks(lines, picks){ var i; for(i=0;i<picks.length;i++){ lines.push(picks[i]); } }
@@ -868,7 +872,7 @@ function render(){
   if(s.day==="sun"&&(s.sweet!=="none"||s.sweetPastry||s.briosky||s.bagety||s.burger)){ html+='<div class="note">V neděli jsme vynechali sladké a doplňky – nejsou v tento den dostupné.</div>'; }
   if(s.day==="sat"&&false){ }
   if(s.budget>0&&total>s.budget){ html+='<div class="note">Nepodařilo se srovnat přesně do rozpočtu (drží minimum 1 ks u položky). Uberte ručně nebo zvyšte strop.</div>'; }
-  else if(s.budget>0){ html+='<div class="note">Návrh byl upraven do rozpočtu '+fmt(s.budget)+' Kč.</div>'; }
+  else if(s.budget>0){ var lo=s.budget-total; if(lo>s.budget*0.22){ html+='<div class="note">Tohle je pro daný počet hostů už pořádně vydatné pohoštění. Jestli chcete vyčerpat celý rozpočet, přidejte další druhy nebo počty upravte ručně.</div>'; } else { html+='<div class="note">Návrh byl sestaven do rozpočtu '+fmt(s.budget)+' Kč.</div>'; } }
 
   var cats=["misa","dort","chleb","kan","brioska","bageta","toast","tortilla","houska","burger","hotove","smazene","aspik","salat","pomazanka","balene","dezert","kolacek","kolac","kolacekvaha","buchta","zavin","pecivo"],c,gi=0;
   for(c=0;c<cats.length;c++){
