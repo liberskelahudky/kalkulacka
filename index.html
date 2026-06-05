@@ -230,6 +230,12 @@ table{width:100%;border-collapse:collapse;}
   .lede{font-size:15px;}
   .stat .v{font-size:21px;}
 }
+.guide{max-width:900px;margin:38px auto 0;background:var(--cream-2);border:1px solid var(--line);border-radius:18px;padding:24px 26px;}
+.guide h3{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0 0 16px;text-align:center;color:var(--brown);}
+.guide-steps{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;}
+.gstep{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:rgba(59,26,13,.85);line-height:1.5;}
+.gstep .gnum{flex:none;width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;}
+@media(max-width:560px){.guide-steps{grid-template-columns:1fr;}.guide{padding:18px;}}
 </style>
 </head>
 <body>
@@ -257,7 +263,7 @@ table{width:100%;border-collapse:collapse;}
       <div class="field">
         <label class="lbl">Typ akce <span class="hint">ovlivní počet kousků na osobu</span></label>
         <div class="opts">
-          <label class="opt" data-occ="coffee">Ke kávě<small>lehké · 3–4 ks</small><input type="radio" name="occ" value="coffee"></label>
+          <label class="opt" data-occ="coffee">Malé pohoštění<small>lehké · 3–4 ks</small><input type="radio" name="occ" value="coffee"></label>
           <label class="opt" data-occ="meeting">Firemní meeting<small>svačina · 4–5 ks</small><input type="radio" name="occ" value="meeting"></label>
           <label class="opt sel" data-occ="party">Večírek / raut<small>5–6 ks</small><input type="radio" name="occ" value="party" checked></label>
           <label class="opt" data-occ="feast">Oslava / místo oběda<small>vydatné · 7–9 ks</small><input type="radio" name="occ" value="feast"></label>
@@ -331,6 +337,15 @@ table{width:100%;border-collapse:collapse;}
       </div>
     </div>
 
+  </div>
+  <div class="guide">
+    <h3>Jak Rautomat funguje</h3>
+    <div class="guide-steps">
+      <div class="gstep"><span class="gnum">1</span><div><strong>Nastavte akci</strong><br>Počet hostů, typ akce, den vyzvednutí, skladbu chutí, velikost soust a rozpočet.</div></div>
+      <div class="gstep"><span class="gnum">2</span><div><strong>Stiskněte „Vydat pohoštění"</strong><br>Rautomat sestaví vyvážený návrh košíku na míru.</div></div>
+      <div class="gstep"><span class="gnum">3</span><div><strong>Dolaďte počty</strong><br>Tlačítky − a + měníte množství, 🔄 vymění daný druh za jiný a ✕ položku odebere.</div></div>
+      <div class="gstep"><span class="gnum">4</span><div><strong>Přidejte vše do košíku</strong><br>Tlačítko „Přidat vše do košíku" naskládá celý návrh přímo na lahudky.cz.</div></div>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -876,7 +891,7 @@ function render(){
   wasFree=(total>=FREE_FROM);
 }
 
-function occName(occ){ if(occ==="coffee"){return "lehké pohoštění";} if(occ==="meeting"){return "firemní meeting";} if(occ==="feast"){return "oslava";} return "večírek / raut"; }
+function occName(occ){ if(occ==="coffee"){return "malé pohoštění";} if(occ==="meeting"){return "firemní meeting";} if(occ==="feast"){return "oslava";} return "večírek / raut"; }
 function stat(k,v,sub){ return '<div class="stat"><div class="k">'+k+'</div><div class="v">'+v+(sub?' <span>'+sub+'</span>':'')+'</div></div>'; }
 
 function renderLine(line,p){
