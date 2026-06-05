@@ -6,7 +6,7 @@
 <title>Rautomat – Libeřské lahůdky</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
 <style>
 :root{
   --orange:#E85520; --brown:#3B1A0D; --olive:#6B7A50; --cream:#F0E8D6;
@@ -16,20 +16,22 @@
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;color:var(--brown);
-  background:radial-gradient(1100px 600px at 110% -10%, rgba(232,85,32,.10), transparent 60%),
-    radial-gradient(900px 700px at -10% 110%, rgba(107,122,80,.12), transparent 60%), var(--cream);
+  background:transparent;
   line-height:1.5;-webkit-font-smoothing:antialiased;}
-.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px;}
-.head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:8px;}
+.wrap{max-width:1320px;margin:0 auto;padding:40px 24px 72px;}
+.head{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
 .logo{height:46px;width:auto;display:block;}
 .logo-fallback{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--orange);}
-.head h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.4vw,46px);line-height:1.02;margin:14px 0 6px;letter-spacing:-.5px;}
+.head h1{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(40px,6vw,64px);line-height:1.02;margin:8px 0 2px;letter-spacing:-1px;text-align:center;color:var(--brown);}
+.tagline{font-family:'Sacramento',cursive;font-weight:400;font-size:clamp(34px,5vw,56px);color:var(--brown);text-align:center;line-height:1.05;margin:2px 0 22px;}
+.head h1.brand .b1{color:var(--brown);}
+.head h1.brand .b2{color:var(--orange);}
 .head h1 em{font-style:italic;color:var(--orange);}
-.lede{max-width:680px;font-size:16px;color:rgba(59,26,13,.78);margin:0 0 26px;}
+.lede{max-width:760px;font-size:16.5px;color:rgba(59,26,13,.74);margin:0 auto 30px;text-align:center;}
 .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--olive);border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;background:var(--paper);}
 .grid{display:grid;grid-template-columns:380px 1fr;gap:26px;align-items:start;}
 @media(max-width:880px){.grid{grid-template-columns:1fr;}}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:24px;}
+.card{background:var(--paper);border:1px solid var(--line-strong);border-radius:20px;box-shadow:0 22px 50px -26px rgba(59,26,13,.4);padding:24px;}
 .card.sticky{position:sticky;top:18px;}
 @media(max-width:880px){.card.sticky{position:static;}}
 .card h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0 0 4px;letter-spacing:-.2px;}
@@ -106,7 +108,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,sans-serif;co
 /* reveal + flourishes */
 .reveal{opacity:0;animation:drop .55s cubic-bezier(.34,1.4,.5,1) both;}
 @keyframes drop{0%{opacity:0;transform:translateY(-26px)}60%{opacity:1;transform:translateY(4px)}100%{opacity:1;transform:translateY(0)}}
-.head h1 em{background:linear-gradient(90deg,var(--orange),#f2843f,var(--orange));background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:flow 4s linear infinite;}
+.head h1 em{font-style:normal;background:linear-gradient(90deg,var(--orange),#f2843f,var(--orange));background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:flow 4s linear infinite;}
 @keyframes flow{to{background-position:200% center}}
 .totalbar .big{animation:pop .5s cubic-bezier(.34,1.56,.64,1) both;}
 @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
@@ -209,17 +211,31 @@ table{width:100%;border-collapse:collapse;}
 .foot a{color:var(--olive);}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(40px);background:var(--brown);color:var(--cream);padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;transition:.25s;pointer-events:none;box-shadow:var(--shadow);z-index:50;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media(max-width:560px){
+  .wrap{padding:20px 14px 56px;}
+  .card{padding:18px;}
+  .thumb{width:36px;height:36px;font-size:18px;border-radius:9px;}
+  .linehead{gap:9px;}
+  td{padding:8px 3px;}
+  .name{font-size:13px;}
+  .qty button{width:27px;height:27px;font-size:15px;}
+  .swap{width:26px;height:26px;margin-right:3px;font-size:12px;}
+  .del{font-size:16px;padding:3px 4px;}
+  .sum{font-size:13px;}
+  .btn-mini{min-width:0;flex:1 1 auto;}
+  .btn-cart-big{padding:14px 16px;gap:11px;}
+  .btn-cart-big .bc-tx{font-size:16px;}
+  .head h1{font-size:34px;}
+  .lede{font-size:15px;}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="head">
-    <img class="logo" src="https://www.lahudky.cz/wp-content/uploads/2019/08/LL_full_colour_RGB_450px-min-e1566376099472.png" alt="Libeřské lahůdky" onerror="this.style.display='none';document.getElementById('lf').style.display='block';">
-    <span id="lf" class="logo-fallback" style="display:none;">Libeřské lahůdky</span>
-    <span class="badge">Rautomat</span>
-  </div>
-  <h1>Pohoštění <em>na míru</em> za půl minuty</h1>
+  <h1 class="brand">Rautomat</h1>
+  <p class="tagline">Pohoštění na pár kliknutí</p>
   <p class="lede">Řekněte nám, kolik máte hostů, jaký druh akce chystáte, na co mají chuť a kolik chcete utratit. My z aktuální nabídky Libeřských lahůdek sestavíme vyvážený návrh košíku – chlebíčky, kanapky, obložené mísy, dezerty i doplňky – s počty, cenami a přidáním přímo do košíku.</p>
 
   <div class="grid">
@@ -260,7 +276,7 @@ table{width:100%;border-collapse:collapse;}
       <div class="field">
         <label class="lbl">Skladba chutí</label>
         <div class="opts">
-          <label class="opt" data-style="meat">Spíš masité<small>vege ~15 %</small><input type="radio" name="style" value="meat"></label>
+          <label class="opt" data-style="meat">Spíše masité<small>vege ~15 %</small><input type="radio" name="style" value="meat"></label>
           <label class="opt sel" data-style="mix">Vyvážené<small>vege ~30 %</small><input type="radio" name="style" value="mix" checked></label>
           <label class="opt" data-style="moreveg">Více zeleninové<small>vege ~60 %</small><input type="radio" name="style" value="moreveg"></label>
           <label class="opt" data-style="vege">Jen vegetariánské<small>100 % vege</small><input type="radio" name="style" value="vege"></label>
@@ -270,9 +286,9 @@ table{width:100%;border-collapse:collapse;}
       <div class="field">
         <label class="lbl">Velikost soust</label>
         <div class="opts three">
-          <label class="opt" data-size="chleb">Spíš chlebíčky<small>sytější</small><input type="radio" name="size" value="chleb"></label>
+          <label class="opt" data-size="chleb">Spíše chlebíčky<small>sytější</small><input type="radio" name="size" value="chleb"></label>
           <label class="opt sel" data-size="bal">Vyvážené<small>mix</small><input type="radio" name="size" value="bal" checked></label>
-          <label class="opt" data-size="kan">Spíš jednohubky<small>kanapky</small><input type="radio" name="size" value="kan"></label>
+          <label class="opt" data-size="kan">Spíše jednohubky<small>kanapky</small><input type="radio" name="size" value="kan"></label>
         </div>
       </div>
 
@@ -304,24 +320,17 @@ table{width:100%;border-collapse:collapse;}
       </div>
 
       <button class="go" type="button" onclick="generate()">Vydat pohoštění →</button>
-
-      <details class="howto">
-        <summary>Jak to počítáme?</summary>
-        <p>Z druhu akce odvodíme počet slaných kousků na osobu (ke kávě ≈ 3,5 / firemní meeting ≈ 4,5 / večírek ≈ 5,5 / oslava ≈ 8), rozdělíme je mezi chlebíčky a kanapky podle velikosti soust a dodržíme poměr vegetariánských položek. Kusy rozprostřeme mezi víc druhů. Obložená mísa se počítá zhruba na 10–12 osob a o něco sníží počet jednotlivých kousků. Krémové dezerty a volitelné doplňky (koláčky ≈ ⅔/os, briošky ≈ 0,4/os, bagety ≈ 1 na 4 os, mini burgery 1 box/12 os) přidáme podle voleb. Respektujeme minimální odběry na druh (chlebíčky 5 ks, kanapky 10 ks, koláčky 5 ks od druhu – ostatní 1 ks/porce), takže počet u položky se může zaokrouhlit nahoru. Koláče i svatební koláčky se počítají po jednom kuse. Podle dne vyzvednutí navíc omezíme dostupné kategorie (v neděli jen chlebíčky, kanapky a mísy; v sobotu bez buchet a krájených koláčů) a ukážeme objednací uzávěrku – koláče a koláčky mají dřívější termín než ostatní sortiment. Strop rozpočtu návrh úměrně přiškrtí. Ceny pocházejí z e-shopu lahudky.cz, jsou vč. DPH a orientační – nabídka se mění.</p>
-      </details>
     </div>
 
     <div class="card" id="result">
       <div class="empty">
-        <div class="ico">🥪</div>
+        <div class="ico">🍽️</div>
         <h2 style="margin-bottom:6px;">Výdejní tác je zatím prázdný</h2>
         <p>Vyplňte nastavení akce vlevo a stiskněte <strong>Vydat pohoštění</strong>. Rautomat vám naskládá hotový návrh košíku, který můžete dál upravovat.</p>
       </div>
     </div>
 
   </div>
-
-  <p class="foot">Postaveno z aktuální nabídky <a href="https://www.lahudky.cz" target="_blank" rel="noopener">lahudky.cz</a> · ceny vč. DPH, orientační · kompletní sortiment: chlebíčky, kanapky, mísy, briošky, bagety, toasty, tortilly, housky, mini burgery, hotová & smažená jídla, lahůdkářská klasika, saláty & pomazánky, dezerty, koláčky, koláče, buchty, záviny, pečivo. Minimální odběry na druh jsou u položek; tlačítko přidá zboží přímo do košíku. Chlebíčky Budějčák a Jarní jsou jen pro prodejnu České Budějovice (štítek „jen ČB“). Nově též chlebíčkový dort, řecký jogurt s granolou, hraběnčiny řezy, dezert s maracujou a svatební koláčky na váhu (480 Kč/kg – doporučujeme mix). Doprava po Praze zdarma při objednávce nad 3 000 Kč.</p>
 </div>
 <div class="toast" id="toast"></div>
 
