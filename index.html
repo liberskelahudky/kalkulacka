@@ -882,10 +882,20 @@ function render(){
     else if(p.cat==="misa"){ misaPieces+=cart[i].qty; }
   }
   var total=linesTotal(cart), perPerson=s.people>0?(total/s.people):0, savPer=s.people>0?(savoryPieces/s.people):0;
+  var baseP=piecesPerPerson(s.occ);
+  var recCost=linesTotal(buildCartGen(s,1));
+  var lowBudget=(s.budget>0 && savPer<baseP*0.5);
 
   var html="";
   html+='<h2>Návrh pohoštění</h2>';
   html+='<p class="sub">Pro '+s.people+' hostů · '+occName(s.occ)+'. Vše níže můžete doladit.</p>';
+  if(lowBudget){
+    html+='<div style="background:#FDECEA;border:1px solid #E0573E;border-radius:14px;padding:13px 15px;margin:0 0 16px;font-size:13.5px;line-height:1.5;color:#7A2618;">'
+      +'<strong>\u26A0\uFE0F Rozpočet je na tento počet hostů nízký.</strong><br>'
+      +'Doporučené množství pro '+s.people+' hostů ('+occName(s.occ)+') vyjde kolem <strong>'+fmt(recCost)+' Kč</strong> (\u007e'+fmt(Math.round(recCost/(s.people||1)))+' Kč na hosta). Váš rozpočet '+fmt(s.budget)+' Kč pokryje jen '+fmt(total)+' Kč, takže na pořádné slané pohoštění v téhle nabídce skoro nezbylo a '+s.people+' hostů nenasytí.<br>'
+      +'<strong>Zvyšte rozpočet, nebo upravte počet hostů.</strong>'
+      +'</div>';
+  }
   html+='<div class="summary">';
   html+=stat("Hostů", '<span class="cnt" data-to="'+s.people+'">0</span>', "");
   html+=stat("Slaných kousků", '<span class="cnt" data-to="'+savoryPieces+'">0</span>', "≈ "+(Math.round(savPer*10)/10)+" / os");
