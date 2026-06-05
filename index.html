@@ -265,10 +265,10 @@ table{width:100%;border-collapse:collapse;}
       <div class="field">
         <label class="lbl">Typ akce <span class="hint">ovlivní počet kousků na osobu</span></label>
         <div class="opts">
-          <label class="opt" data-occ="coffee">Malé pohoštění<small>lehké · 3–4 ks</small><input type="radio" name="occ" value="coffee"></label>
-          <label class="opt" data-occ="meeting">Firemní meeting<small>svačina · 4–5 ks</small><input type="radio" name="occ" value="meeting"></label>
-          <label class="opt sel" data-occ="party">Večírek / raut<small>5–6 ks</small><input type="radio" name="occ" value="party" checked></label>
-          <label class="opt" data-occ="feast">Oslava / místo oběda<small>vydatné · 7–9 ks</small><input type="radio" name="occ" value="feast"></label>
+          <label class="opt" data-occ="coffee">Malé pohoštění<input type="radio" name="occ" value="coffee"></label>
+          <label class="opt" data-occ="meeting">Firemní meeting<input type="radio" name="occ" value="meeting"></label>
+          <label class="opt sel" data-occ="party">Raut<input type="radio" name="occ" value="party" checked></label>
+          <label class="opt" data-occ="feast">Oslava<input type="radio" name="occ" value="feast"></label>
         </div>
       </div>
 
@@ -334,7 +334,7 @@ table{width:100%;border-collapse:collapse;}
     <div class="card" id="result">
       <div class="empty">
         <div class="ico">🍽️</div>
-        <h2 style="margin-bottom:6px;">Váš stůl je zatím prázdný</h2>
+        <h2 style="margin-bottom:6px;">Stůl je zatím prázdný</h2>
         <p>Vyplňte nastavení akce vlevo a stiskněte <strong>Vydat pohoštění</strong>. Rautomat vám naskládá hotový návrh košíku, který můžete dál upravovat.</p>
       </div>
     </div>
@@ -893,7 +893,7 @@ function render(){
   wasFree=(total>=FREE_FROM);
 }
 
-function occName(occ){ if(occ==="coffee"){return "malé pohoštění";} if(occ==="meeting"){return "firemní meeting";} if(occ==="feast"){return "oslava";} return "večírek / raut"; }
+function occName(occ){ if(occ==="coffee"){return "malé pohoštění";} if(occ==="meeting"){return "firemní meeting";} if(occ==="feast"){return "oslava";} return "raut"; }
 function stat(k,v,sub){ return '<div class="stat"><div class="k">'+k+'</div><div class="v">'+v+(sub?' <span>'+sub+'</span>':'')+'</div></div>'; }
 
 function renderLine(line,p){
