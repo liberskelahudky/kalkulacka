@@ -31,7 +31,8 @@ h1.brand{font-family:'Fraunces',serif !important;font-weight:700 !important;font
 .head h1 em{font-style:italic;color:var(--orange);}
 .lede{max-width:760px;font-size:16.5px;color:rgba(59,26,13,.74);margin:0 auto 30px;text-align:center !important;}
 .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--olive);border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;background:var(--paper);}
-.grid{display:grid;grid-template-columns:580px 1fr;gap:26px;align-items:start;}
+.grid{display:grid;grid-template-columns:minmax(0,580px) minmax(0,1fr);gap:26px;align-items:start;}
+  .grid>*{min-width:0;}
 @media(max-width:980px){.grid{grid-template-columns:1fr;}}
 .card{background:var(--paper);border:1px solid var(--line-strong);border-radius:20px;box-shadow:0 22px 50px -26px rgba(59,26,13,.4);padding:24px;}
 .card.sticky{position:sticky;top:18px;}
@@ -175,6 +176,7 @@ td.acts{white-space:nowrap;}
 .group-title .pill{font-family:'Plus Jakarta Sans';font-size:11px;font-weight:700;background:var(--cream-2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:rgba(59,26,13,.6);}
 table{width:100%;border-collapse:collapse;}
 .line{border-bottom:1px solid var(--line);}
+  .line td:first-child{overflow-wrap:anywhere;}
 .line td{padding:10px 6px;vertical-align:middle;}
 .line .name{font-weight:600;font-size:14px;}
 .line .name a{color:var(--brown);text-decoration:none;border-bottom:1px solid var(--line-strong);}
@@ -346,6 +348,7 @@ table{width:100%;border-collapse:collapse;}
       <label class="check" id="ck_brio"><input type="checkbox" id="briosky"> Plněné briošky <span class="hint">sytější</span></label>
       <label class="check" id="ck_bag"><input type="checkbox" id="bagety"> Balené bagety <span class="hint">místo oběda</span></label>
       <label class="check" id="ck_burg"><input type="checkbox" id="burger"> Mini burgery <span class="hint">boxy po 9 ks</span></label>
+      <label class="check" id="ck_spread"><input type="checkbox" id="spread"> Pomazánky s pečivem <span class="hint">chléb a rohlíčky</span></label>
 
       <div class="section-h">Mísa a omezení</div>
       <label class="check on" id="misaCheck"><input type="checkbox" id="misa" checked> Obložená mísa jako střed stolu</label>
@@ -665,6 +668,7 @@ function readSettings(){
     misa:document.getElementById("misa").checked, noFish:document.getElementById("fish").checked,
     sweetPastry:document.getElementById("sweetPastry").checked, briosky:document.getElementById("briosky").checked,
     bagety:document.getElementById("bagety").checked, burger:document.getElementById("burger").checked,
+    spread:document.getElementById("spread").checked,
     budget:budget
   };
 }
@@ -732,6 +736,8 @@ function buildCartGen(s, gen){
   if(s.briosky&&catAvailable("brioska",s.day)){ var brT=Math.round(s.people*0.4*gen); if(brT<1){brT=1;} appendPicks(lines, pickSpread(poolFor("brioska", s.style===4, s.noFish), brT)); }
   if(s.bagety&&catAvailable("bageta",s.day)){ var bgT=Math.round(s.people/4*gen); if(bgT<1){bgT=1;} appendPicks(lines, pickSpread(poolFor("bageta", s.style===4, s.noFish), bgT)); }
   if(s.burger&&catAvailable("burger",s.day)){ var buB=Math.round(s.people/12*gen); if(buB<1){buB=1;} appendPicks(lines, pickSpread(poolFor("burger", s.style===4, false), buB)); }
+  if(s.spread&&catAvailable("pomazanka",s.day)){ var pmKg=Math.round(s.people*0.05*gen); if(pmKg<1){pmKg=1;} appendPicks(lines, pickSpread(poolFor("pomazanka", false, s.noFish), pmKg)); }
+  if(s.spread&&catAvailable("pecivo",s.day)){ var rohl=[],pri,prp; for(pri=0;pri<CATALOG.length;pri++){ prp=CATALOG[pri]; if(prp.cat==="pecivo"&&prp.id!=="pe03"){ rohl.push(prp); } } var rohlT=Math.round(s.people*0.9*gen); if(rohlT<2){rohlT=2;} appendPicks(lines, pickSpread(rohl, rohlT)); var chlT=Math.round(s.people/15*gen); if(chlT<1){chlT=1;} appendPicks(lines, [{id:"pe03", qty:chlT}]); }
   if(s.sweet!=="none"&&catAvailable("dezert",s.day)){ var dezPer=(s.sweet==="full")?1:0.5; var dezTotal=Math.round(s.people*dezPer*gen); if(dezTotal<1){dezTotal=1;} appendPicks(lines, pickSpread(poolFor("dezert",false,s.noFish), dezTotal)); }
   if(s.sweetPastry&&catAvailable("kolacek",s.day)){ var spT=Math.round(s.people*0.66*gen); if(spT<1){spT=1;} appendPicks(lines, pickSpread(poolFor("kolacek",false,false), spT)); }
   return mergeLines(lines);
@@ -1034,7 +1040,7 @@ function addAllToCart(){
   var secs=Math.round(total*2.5);
   var btn=document.querySelector(".btn-cart-big"); if(btn){ btn.disabled=true; }
   var ov=document.createElement("div"); ov.className="cart-inline active";
-  ov.innerHTML='<div style="text-align:center;"><div style="font-size:36px;line-height:1;">🛒</div><div class="cart-h" style="margin:8px 0 6px;">Otevře se okno s košíkem</div><div class="cart-sub" style="font-size:14px;">Lahůdkomat otevře <b>nové okno s košíkem na lahudky.cz</b> a postupně do něj přidá <b>'+total+' položek</b> (cca '+secs+' s). Okno prosím <b>nechte otevřené</b>, dokud se vše nepřidá – pak se v něm objeví hotový košík.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;"><button type="button" class="btn-mini ci-go" style="max-width:210px;background:var(--orange);color:#fff;border-color:var(--orange);font-size:14px;">Pokračovat – naskládat košík →</button><button type="button" class="btn-mini ci-cancel" style="max-width:100px;">Zrušit</button></div></div>';
+  ov.innerHTML='<div style="text-align:center;"><div style="font-size:36px;line-height:1;">🛒</div><div class="cart-h" style="margin:8px 0 6px;">Otevře se okno s košíkem</div><div class="cart-sub" style="font-size:14px;">Lahůdkomat otevře <b>nové okno s košíkem na lahudky.cz</b> a bude do něj <b>postupně</b> přidávat <b>'+total+' položek</b> (cca '+secs+' s). To okno se přitom bude <b>několikrát načítat a problikávat</b> – to je normální. <b>Nezavírejte ho</b> a klidně zůstaňte tady – <b>průběh uvidíte níže</b>. Až bude hotovo, objeví se v něm naplněný košík.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;"><button type="button" class="btn-mini ci-go" style="max-width:210px;background:var(--orange);color:#fff;border-color:var(--orange);font-size:14px;">Pokračovat – naskládat košík →</button><button type="button" class="btn-mini ci-cancel" style="max-width:100px;">Zrušit</button></div></div>';
   if(btn&&btn.parentNode){ btn.parentNode.insertBefore(ov, btn.nextSibling); } else { document.body.appendChild(ov); }
   try{ ov.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){}
   var cb=ov.querySelector(".ci-cancel"); if(cb){ cb.onclick=function(){ if(btn){ btn.disabled=false; } if(ov.parentNode){ ov.parentNode.removeChild(ov); } }; }
@@ -1050,8 +1056,10 @@ function addAllToCart(){
     }catch(e){}
     try{ win.blur(); }catch(e){}
     try{ window.focus(); }catch(e){}
+    setTimeout(function(){ try{ win.blur(); }catch(e){} try{ window.focus(); }catch(e){} }, 80);
+    setTimeout(function(){ try{ window.focus(); }catch(e){} }, 700);
     ov.className="cart-inline active";
-    ov.innerHTML='<div class="ci-row"><span class="cart-spin small"></span><div><div class="cart-h" style="font-size:19px;margin-bottom:4px;">🛒 Skládá se košík v novém okně…</div><div class="cart-sub" style="margin:0;font-size:13.5px;">V okně s košíkem na lahudky.cz se teď postupně přidává vaše pohoštění. <b>Prosím nezavírejte ho</b> – až bude hotovo, košík se v něm sám zobrazí.</div></div></div><div class="cart-bar" style="height:12px;"><div class="cart-fill"></div></div><div class="cart-n" style="font-size:14px;margin-top:9px;">Přidáno <b class="cn">0</b> z '+total+' položek…</div>';
+    ov.innerHTML='<div class="ci-row"><span class="cart-spin small"></span><div><div class="cart-h" style="font-size:19px;margin-bottom:4px;">🛒 Skládá se košík v novém okně…</div><div class="cart-sub" style="margin:0;font-size:13.5px;">V okně s košíkem na lahudky.cz se teď <b>postupně</b> přidává vaše pohoštění – okno se přitom <b>načítá a problikává</b>, to je v pořádku. <b>Nezavírejte ho.</b> Můžete zůstat tady, průběh vidíte níže; až bude hotovo, košík se v okně sám zobrazí.</div></div></div><div class="cart-bar" style="height:12px;"><div class="cart-fill"></div></div><div class="cart-n" style="font-size:14px;margin-top:9px;">Přidáno <b class="cn">0</b> z '+total+' položek…</div>';
     function upd(n){ var c=ov.querySelector(".cn"); if(c){ c.textContent=String(n); } var f=ov.querySelector(".cart-fill"); if(f){ f.style.width=Math.round(n/total*100)+"%"; } }
     var idx=0, FALLBACK=2500, settled=false;
     function advance(){ if(settled){ return; } settled=true; idx++; upd(idx); setTimeout(go,250); }
